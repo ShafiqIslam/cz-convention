@@ -1,5 +1,5 @@
 # cz-convention 
-forked from [commitizen/cz-conventional-changelog][https://github.com/commitizen/cz-conventional-changelog] to suit [my taste][https://github.com/ShafiqIslam/dotfiles/blob/master/.gitmessage].
+forked from [commitizen/cz-conventional-changelog](https://github.com/commitizen/cz-conventional-changelog) to suit [my taste](https://github.com/ShafiqIslam/dotfiles/blob/master/.gitmessage).
 
 # Pre Requisite
 Install commitizen
