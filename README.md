@@ -9,7 +9,7 @@ npm install -g commitizen
 
 # Install this adapter
 
-1. Download and extract/clone this repo.
+1. Clone this repo.
 2. cd into the folder.
 3. Run `npm install`.
 
