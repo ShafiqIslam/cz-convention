@@ -1,20 +1,17 @@
 {
-  "name": "cz-conventional-changelog",
-  "version": "0.0.0-semantically-released.0",
-  "description": "Commitizen adapter following the conventional-changelog format.",
+  "name": "cz-convention-shafiq",
+  "version": "0.0.0",
+  "description": "Commitizen adapter following https://github.com/ShafiqIslam/dotfiles/blob/master/.gitmessage.",
   "main": "index.js",
   "scripts": {
-    "commit": "git-cz",
-    "test": "mocha *.test.js",
-    "format": "prettier --write *.js",
-    "semantic-release": "semantic-release"
+    "commit": "git-cz"
   },
-  "homepage": "https://github.com/commitizen/cz-conventional-changelog",
+  "homepage": "https://github.com/ShafiqIslam/cz-convention",
   "repository": {
     "type": "git",
-    "url": "https://github.com/commitizen/cz-conventional-changelog.git"
+    "url": "https://github.com/ShafiqIslam/cz-convention.git"
   },
-  "author": "Jim Cummins <jimthedev@gmail.com>",
+  "author": "Shafiqul Islam <islamshafiq003@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "chalk": "^2.4.1",
@@ -31,10 +28,7 @@
     "commitizen": "^2.10.1",
     "cosmiconfig": "^4.0.0",
     "mocha": "^5.2.0",
-    "mock-require": "^3.0.3",
-    "prettier": "^1.15.3",
-    "semantic-release": "^15.13.3",
-    "semver": "^5.6.0"
+    "mock-require": "^3.0.3"
   },
   "optionalDependencies": {
     "@commitlint/load": ">6.1.1"
