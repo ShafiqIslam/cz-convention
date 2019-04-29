@@ -1,0 +1,173 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	0.0.0	/4aed4f00/
+@commitlint/load	package.json	/^    "@commitlint\/load": ">6.1.1"$/;"	s	object:optionalDependencies
+@types/chai	package.json	/^    "@types\/chai": "^4.1.7",$/;"	s	object:devDependencies
+@types/mocha	package.json	/^    "@types\/mocha": "^5.2.5",$/;"	s	object:devDependencies
+AnonymousFunction61196fe60100	engine.js	/^  return array.filter(function(x) {$/;"	f
+AnonymousFunction61196fe60200	engine.js	/^  var choices = map(types, function(type, key) {$/;"	f	function:module.exports
+AnonymousFunction61196fe60300	engine.js	/^          filter: function(value) {$/;"	f
+AnonymousFunction61196fe60400	engine.js	/^          message: function(answers) {$/;"	f
+AnonymousFunction61196fe60500	engine.js	/^          validate: function(subject, answers) {$/;"	f
+AnonymousFunction61196fe60600	engine.js	/^          transformer: function(subject, answers) {$/;"	f
+AnonymousFunction61196fe60700	engine.js	/^          filter: function(subject) {$/;"	f
+AnonymousFunction61196fe60800	engine.js	/^          when: function(answers) {$/;"	f
+AnonymousFunction61196fe60900	engine.js	/^          validate: function(breakingBody, answers) {$/;"	f
+AnonymousFunction61196fe60a00	engine.js	/^          when: function(answers) {$/;"	f
+AnonymousFunction61196fe60b00	engine.js	/^          when: function(answers) {$/;"	f
+AnonymousFunction61196fe60c00	engine.js	/^          when: function(answers) {$/;"	f
+AnonymousFunction61196fe60d00	engine.js	/^      ]).then(function(answers) {$/;"	f
+AnonymousFunction66e3de480100	index.js	/^    commitlintLoad().then(function(clConfig) {$/;"	f
+AnonymousFunctione758e6140100	engine.test.js	/^describe('commit message', function() {$/;"	f
+AnonymousFunctione758e6140200	engine.test.js	/^  it('only header w\/ out scope', function() {$/;"	f	function:AnonymousFunctione758e6140100
+AnonymousFunctione758e6140300	engine.test.js	/^  it('only header w\/ scope', function() {$/;"	f	function:AnonymousFunctione758e6140100
+AnonymousFunctione758e6140400	engine.test.js	/^  it('header and body w\/ out scope', function() {$/;"	f	function:AnonymousFunctione758e6140100
+AnonymousFunctione758e6140500	engine.test.js	/^  it('header and body w\/ scope', function() {$/;"	f	function:AnonymousFunctione758e6140100
+AnonymousFunctione758e6140600	engine.test.js	/^  it('header, body and issues w\/ out scope', function() {$/;"	f	function:AnonymousFunctione758e6140100
+AnonymousFunctione758e6140700	engine.test.js	/^  it('header, body and issues w\/ scope', function() {$/;"	f	function:AnonymousFunctione758e6140100
+AnonymousFunctione758e6140800	engine.test.js	/^  it('header, body and long issues w\/ out scope', function() {$/;"	f	function:AnonymousFunctione758e6140100
+AnonymousFunctione758e6140900	engine.test.js	/^  it('header, body and long issues w\/ scope', function() {$/;"	f	function:AnonymousFunctione758e6140100
+AnonymousFunctione758e6140a00	engine.test.js	/^  it('header and long body w\/ out scope', function() {$/;"	f	function:AnonymousFunctione758e6140100
+AnonymousFunctione758e6140b00	engine.test.js	/^  it('header and long body w\/ scope', function() {$/;"	f	function:AnonymousFunctione758e6140100
+AnonymousFunctione758e6140c00	engine.test.js	/^  it('header, long body and issues w\/ out scope', function() {$/;"	f	function:AnonymousFunctione758e6140100
+AnonymousFunctione758e6140d00	engine.test.js	/^  it('header, long body and issues w\/ scope', function() {$/;"	f	function:AnonymousFunctione758e6140100
+AnonymousFunctione758e6140e00	engine.test.js	/^  it('header, long body and long issues w\/ out scope', function() {$/;"	f	function:AnonymousFunctione758e6140100
+AnonymousFunctione758e6140f00	engine.test.js	/^  it('header, long body and long issues w\/ scope', function() {$/;"	f	function:AnonymousFunctione758e6140100
+AnonymousFunctione758e6141000	engine.test.js	/^  it('header, long body, breaking change, and long issues w\/ scope', function() {$/;"	f	function:AnonymousFunctione758e6140100
+AnonymousFunctione758e6141100	engine.test.js	/^  it('header, long body, breaking change (with prefix entered), and long issues w\/ scope', func/;"	f	function:AnonymousFunctione758e6140100
+AnonymousFunctione758e6141200	engine.test.js	/^describe('validation', function() {$/;"	f
+AnonymousFunctione758e6141300	engine.test.js	/^  it('subject exceeds max length', function() {$/;"	f	function:AnonymousFunctione758e6141200
+AnonymousFunctione758e6141400	engine.test.js	/^  it('empty subject', function() {$/;"	f	function:AnonymousFunctione758e6141200
+AnonymousFunctione758e6141500	engine.test.js	/^describe('defaults', function() {$/;"	f
+AnonymousFunctione758e6141600	engine.test.js	/^  it('defaultType default', function() {$/;"	f	function:AnonymousFunctione758e6141500
+AnonymousFunctione758e6141700	engine.test.js	/^  it('defaultType options', function() {$/;"	f	function:AnonymousFunctione758e6141500
+AnonymousFunctione758e6141800	engine.test.js	/^  it('defaultScope default', function() {$/;"	f	function:AnonymousFunctione758e6141500
+AnonymousFunctione758e6141900	engine.test.js	/^  it('defaultSubject options', function() {$/;"	f	function:AnonymousFunctione758e6141500
+AnonymousFunctione758e6141a00	engine.test.js	/^  it('defaultBody default', function() {$/;"	f	function:AnonymousFunctione758e6141500
+AnonymousFunctione758e6141b00	engine.test.js	/^  it('defaultBody options', function() {$/;"	f	function:AnonymousFunctione758e6141500
+AnonymousFunctione758e6141c00	engine.test.js	/^  it('defaultIssues default', function() {$/;"	f	function:AnonymousFunctione758e6141500
+AnonymousFunctione758e6141d00	engine.test.js	/^  it('defaultIssues options', function() {$/;"	f	function:AnonymousFunctione758e6141500
+AnonymousFunctione758e6141e00	engine.test.js	/^describe('prompts', function() {$/;"	f
+AnonymousFunctione758e6141f00	engine.test.js	/^  it('commit subject prompt for commit w\/ out scope', function() {$/;"	f	function:AnonymousFunctione758e6141e00
+AnonymousFunctione758e6142000	engine.test.js	/^  it('commit subject prompt for commit w\/ scope', function() {$/;"	f	function:AnonymousFunctione758e6141e00
+AnonymousFunctione758e6142100	engine.test.js	/^describe('transformation', function() {$/;"	f
+AnonymousFunctione758e6142200	engine.test.js	/^describe('filter', function() {$/;"	f
+AnonymousFunctione758e6142300	engine.test.js	/^describe('when', function() {$/;"	f
+AnonymousFunctione758e6142400	engine.test.js	/^describe('commitlint config header-max-length', function() {$/;"	f
+AnonymousFunctione758e6142500	engine.test.js	/^      mock('.\/engine', function(opts) {$/;"	f	function:AnonymousFunctione758e6142400.mockOptions
+AnonymousFunctione758e6142600	engine.test.js	/^        mock('cosmiconfig', function() {$/;"	f	function:AnonymousFunctione758e6142400.mockOptions
+AnonymousFunctione758e6142700	engine.test.js	/^          .then(function() {$/;"	f
+AnonymousFunctione758e6142800	engine.test.js	/^    afterEach(function() {$/;"	f	function:AnonymousFunctione758e6142400
+AnonymousFunctione758e6142900	engine.test.js	/^    it('with no environment or commitizen config override', function() {$/;"	f	function:AnonymousFunctione758e6142400
+AnonymousFunctione758e6142a00	engine.test.js	/^      return mockOptions(72).then(function(options) {$/;"	f
+AnonymousFunctione758e6142b00	engine.test.js	/^    it('with environment variable override', function() {$/;"	f	function:AnonymousFunctione758e6142400
+AnonymousFunctione758e6142c00	engine.test.js	/^      return mockOptions(72).then(function(options) {$/;"	f
+AnonymousFunctione758e6142d00	engine.test.js	/^    it('with commitizen config override', function() {$/;"	f	function:AnonymousFunctione758e6142400
+AnonymousFunctione758e6142e00	engine.test.js	/^          load: function() {$/;"	f	function:AnonymousFunctione758e6142400.AnonymousFunctione758e6142d00
+AnonymousFunctione758e6142f00	engine.test.js	/^      return mockOptions(72).then(function(options) {$/;"	f
+AnonymousFunctione758e6143000	engine.test.js	/^    it('default value for Node 4', function() {$/;"	f	function:AnonymousFunctione758e6142400
+AnonymousFunctione758e6143100	engine.test.js	/^      return mockOptions(72).then(function(options) {$/;"	f
+AnonymousFunctione758e6143200	engine.test.js	/^      prompt: function(questions) {$/;"	f
+AnonymousFunctione758e6143300	engine.test.js	/^    function(message) {$/;"	f
+AnonymousFunctione758e6143400	engine.test.js	/^    prompt: function(questions) {$/;"	f
+Install this adapter	README.md	/^# Install this adapter$/;"	c
+Pre Requisite	README.md	/^# Pre Requisite$/;"	c
+Usage	README.md	/^# Usage$/;"	c
+Use this adapter	README.md	/^# Use this adapter$/;"	c
+author	package.json	/^  "author": "Shafiqul Islam <islamshafiq003@gmail.com>",$/;"	s
+body	engine.test.js	/^var body = 'A quick brown fox jumps over the dog';$/;"	v
+breaking	engine.test.js	/^var breaking = 'asdhdfkjhbakjdhjkashd adhfajkhs asdhkjdsh ahshd';$/;"	v
+breakingChange	engine.test.js	/^var breakingChange = 'BREAKING CHANGE: ';$/;"	v
+chai	engine.test.js	/^var chai = require('chai');$/;"	v
+chai	package.json	/^    "chai": "^4.2.0",$/;"	s	object:devDependencies
+chalk	engine.js	/^var chalk = require('chalk');$/;"	v
+chalk	engine.test.js	/^var chalk = require('chalk');$/;"	v
+chalk	package.json	/^    "chalk": "^2.4.1",$/;"	s	object:dependencies
+commit	package.json	/^    "commit": "git-cz"$/;"	s	object:scripts
+commitMessage	engine.test.js	/^function commitMessage(answers, options) {$/;"	f
+commitizen	package.json	/^    "commitizen": "^2.10.1",$/;"	s	object:devDependencies
+commitizen	package.json	/^    "commitizen": {$/;"	o	object:config
+commitlintLoad	index.js	/^    var commitlintLoad = require('@commitlint\/load');$/;"	v
+config	index.js	/^var config = configLoader.load();$/;"	v
+config	package.json	/^  "config": {$/;"	o
+configLoader	index.js	/^var configLoader = require('commitizen').configLoader;$/;"	v
+conventional-commit-types	package.json	/^    "conventional-commit-types": "^2.0.0",$/;"	s	object:dependencies
+conventionalCommitTypes	index.js	/^var conventionalCommitTypes = require('conventional-commit-types');$/;"	v
+cosmiconfig	package.json	/^    "cosmiconfig": "^4.0.0",$/;"	s	object:devDependencies
+customOptions	engine.test.js	/^function customOptions(options) {$/;"	f
+cut	engine.js	/^          cut: false,$/;"	p	class:AnonymousFunction61196fe60d00.wrapOptions
+cz-convention	README.md	/^# cz-convention$/;"	c
+defaultBody	index.js	/^  defaultBody: process.env.CZ_BODY || config.defaultBody,$/;"	p	class:options
+defaultIssues	index.js	/^  defaultIssues: process.env.CZ_ISSUES || config.defaultIssues,$/;"	p	class:options
+defaultOptions	engine.test.js	/^var defaultOptions = {$/;"	c
+defaultScope	index.js	/^  defaultScope: process.env.CZ_SCOPE || config.defaultScope,$/;"	p	class:options
+defaultSubject	index.js	/^  defaultSubject: process.env.CZ_SUBJECT || config.defaultSubject,$/;"	p	class:options
+defaultType	index.js	/^  defaultType: process.env.CZ_TYPE || config.defaultType,$/;"	p	class:options
+dependencies	package.json	/^  "dependencies": {$/;"	o
+description	package.json	/^  "description": "Commitizen adapter following https:\/\/github.com\/ShafiqIslam\/dotfiles\/blob/;"	s
+devDependencies	package.json	/^  "devDependencies": {$/;"	o
+engine	engine.test.js	/^var engine = require('.\/engine');$/;"	v
+engine	index.js	/^var engine = require('.\/engine');$/;"	v
+expect	engine.test.js	/^var expect = chai.expect;$/;"	v
+exports	engine.js	/^module.exports = function(options) {$/;"	f	function:module
+filter	engine.js	/^var filter = function(array) {$/;"	f
+filterSubject	engine.js	/^var filterSubject = function(subject) {$/;"	f
+getQuestion	engine.test.js	/^function getQuestion(name, options) {$/;"	f
+getQuestions	engine.test.js	/^function getQuestions(options) {$/;"	f
+headerLength	engine.js	/^var headerLength = function(answers) {$/;"	f
+homepage	package.json	/^  "homepage": "https:\/\/github.com\/ShafiqIslam\/cz-convention",$/;"	s
+indent	engine.js	/^          indent: '',$/;"	p	class:AnonymousFunction61196fe60d00.wrapOptions
+issues	engine.test.js	/^var issues = 'a issues is not a person that kicks things';$/;"	v
+license	package.json	/^  "license": "MIT",$/;"	s
+lodash.map	package.json	/^    "lodash.map": "^4.5.1",$/;"	s	object:dependencies
+longBody	engine.test.js	/^var longBody =$/;"	v
+longBodySplit	engine.test.js	/^var longBodySplit =$/;"	v
+longIssues	engine.test.js	/^var longIssues =$/;"	v
+longIssuesSplit	engine.test.js	/^var longIssuesSplit =$/;"	v
+longest	engine.js	/^var longest = require('longest');$/;"	v
+longest	package.json	/^    "longest": "^1.0.1",$/;"	s	object:dependencies
+main	package.json	/^  "main": "index.js",$/;"	s
+map	engine.js	/^var map = require('lodash.map');$/;"	v
+maxHeaderWidth	engine.test.js	/^  maxHeaderWidth: 100$/;"	p	class:defaultOptions
+maxHeaderWidth	index.js	/^  maxHeaderWidth:$/;"	p	class:options
+maxLineWidth	engine.test.js	/^  maxLineWidth: 100,$/;"	p	class:defaultOptions
+maxLineWidth	index.js	/^  maxLineWidth:$/;"	p	class:options
+maxSummaryLength	engine.js	/^var maxSummaryLength = function(options, answers) {$/;"	f
+mocha	package.json	/^    "mocha": "^5.2.0",$/;"	s	object:devDependencies
+mock	engine.test.js	/^var mock = require('mock-require');$/;"	v
+mock-require	package.json	/^    "mock-require": "^3.0.3"$/;"	s	object:devDependencies
+mockOptions	engine.test.js	/^    function mockOptions(headerMaxLength) {$/;"	f	function:AnonymousFunctione758e6142400
+name	package.json	/^  "name": "cz-convention-shafiq",$/;"	s
+newline	engine.js	/^          newline: '\\n',$/;"	p	class:AnonymousFunction61196fe60d00.wrapOptions
+optionalDependencies	package.json	/^  "optionalDependencies": {$/;"	o
+options	index.js	/^var options = {$/;"	c
+path	package.json	/^      "path": ".\/index.js"$/;"	s	object:config.commitizen
+processQuestions	engine.test.js	/^function processQuestions(questions, answers, options) {$/;"	f
+questionDefault	engine.test.js	/^function questionDefault(name, options) {$/;"	f
+questionFilter	engine.test.js	/^function questionFilter(name, answer, options) {$/;"	f
+questionPrompt	engine.test.js	/^function questionPrompt(name, answers, options) {$/;"	f
+questionTransformation	engine.test.js	/^function questionTransformation(name, answers, options) {$/;"	f
+questionWhen	engine.test.js	/^function questionWhen(name, answers, options) {$/;"	f
+repository	package.json	/^  "repository": {$/;"	o
+right-pad	package.json	/^    "right-pad": "^1.0.1",$/;"	s	object:dependencies
+rightPad	engine.js	/^var rightPad = require('right-pad');$/;"	v
+scope	engine.test.js	/^var scope = 'everything';$/;"	v
+scripts	package.json	/^  "scripts": {$/;"	o
+semver	engine.test.js	/^var semver = require('semver');$/;"	v
+subject	engine.test.js	/^var subject = 'testing123';$/;"	v
+subject2	engine.test.js	/^var subject2 = 'after the fall, I was gone';$/;"	v
+trim	engine.js	/^          trim: true,$/;"	p	class:AnonymousFunction61196fe60d00.wrapOptions
+type	engine.test.js	/^var type = 'func';$/;"	v
+type	package.json	/^    "type": "git",$/;"	s	object:repository
+types	engine.test.js	/^var types = require('conventional-commit-types').types;$/;"	v
+types	index.js	/^  types: conventionalCommitTypes.types,$/;"	p	class:options
+url	package.json	/^    "url": "https:\/\/github.com\/ShafiqIslam\/cz-convention.git"$/;"	s	object:repository
+version	package.json	/^  "version": "0.0.0",$/;"	s
+width	engine.js	/^          width: options.maxLineWidth$/;"	p	class:AnonymousFunction61196fe60d00.wrapOptions
+word-wrap	package.json	/^    "word-wrap": "^1.0.3"$/;"	s	object:dependencies
+wrap	engine.js	/^var wrap = require('word-wrap');$/;"	v
+wrapOptions	engine.js	/^        var wrapOptions = {$/;"	c	class:AnonymousFunction61196fe60d00

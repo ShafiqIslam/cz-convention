@@ -13,15 +13,11 @@ var options = {
   defaultBody: process.env.CZ_BODY || config.defaultBody,
   defaultIssues: process.env.CZ_ISSUES || config.defaultIssues,
   maxHeaderWidth:
-    (process.env.CZ_MAX_HEADER_WIDTH &&
-      parseInt(process.env.CZ_MAX_HEADER_WIDTH)) ||
-    config.maxHeaderWidth ||
-    100,
+    (process.env.CZ_MAX_HEADER_WIDTH && parseInt(process.env.CZ_MAX_HEADER_WIDTH)) 
+    || config.maxHeaderWidth || 100,
   maxLineWidth:
-    (process.env.CZ_MAX_LINE_WIDTH &&
-      parseInt(process.env.CZ_MAX_LINE_WIDTH)) ||
-    config.maxLineWidth ||
-    100
+    (process.env.CZ_MAX_LINE_WIDTH && parseInt(process.env.CZ_MAX_LINE_WIDTH)) 
+    || config.maxLineWidth || 100
 };
 
 (function(options) {
