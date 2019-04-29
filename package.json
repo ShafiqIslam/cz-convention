@@ -1,0 +1,41 @@
+{
+  "name": "cz-convention-shafiq",
+  "version": "0.0.0",
+  "description": "Commitizen adapter following https://github.com/ShafiqIslam/dotfiles/blob/master/.gitmessage.",
+  "main": "index.js",
+  "scripts": {
+    "commit": "git-cz"
+  },
+  "homepage": "https://github.com/ShafiqIslam/cz-convention",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ShafiqIslam/cz-convention.git"
+  },
+  "author": "Shafiqul Islam <islamshafiq003@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^2.4.1",
+    "conventional-commit-types": "^2.0.0",
+    "lodash.map": "^4.5.1",
+    "longest": "^1.0.1",
+    "right-pad": "^1.0.1",
+    "word-wrap": "^1.0.3"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.5",
+    "chai": "^4.2.0",
+    "commitizen": "^2.10.1",
+    "cosmiconfig": "^4.0.0",
+    "mocha": "^5.2.0",
+    "mock-require": "^3.0.3"
+  },
+  "optionalDependencies": {
+    "@commitlint/load": ">6.1.1"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./index.js"
+    }
+  }
+}
