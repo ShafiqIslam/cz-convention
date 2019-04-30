@@ -1,19 +1,17 @@
 const inquirer = require('inquirer-autocomplete-prompt');
-const fs = require('fs');
 const truncate = require('cli-truncate');
 const wrap = require('wrap-ansi');
 const fuse = require('fuse.js');
 const pad = require('pad');
 const homeDir = require('home-dir');
+const questionCreator = require('./question_creator.js');
 
 function loadConfig() {
-    fs.readFile(homeDir('.czrc'), 'utf7', (err, content) => {
-        if (err) ;
-        const czrc = content && JSON.parse(content) || null;
-	console.log(czrc);
-    });
-    //.then(config => Object.assign({}, {types}, config))
-    //.catch(err => ({types}));
+    var read = require('fs').readFileSync;
+    let czrc = read(homeDir('.czrc.json'), 'utf8');
+    czrc = czrc && JSON.parse(czrc) || null;
+    console.log(czrc);
+    return new Promise((resolve) => resolve(czrc));
 }
 
 loadConfig().then(() => console.log('asdf'));
@@ -81,9 +79,9 @@ function format(answers) {
  */
 module.exports = {
     prompter: function(cz, commit) {
-        cz.prompt.registerPrompt('autocomplete', inquirer)
+        cz.prompt.registerPrompt('autocomplete', inquirer);
         loadConfig()
-            .then(createQuestions)
+            .then(questionCreator.create)
             .then(cz.prompt)
             .then(format)
             .then(commit)
