@@ -1,42 +1,91 @@
-'format cjs';
+const inquirer = require('inquirer-autocomplete-prompt');
+const fs = require('fs');
+const truncate = require('cli-truncate');
+const wrap = require('wrap-ansi');
+const fuse = require('fuse.js');
+const pad = require('pad');
+const homeDir = require('home-dir');
 
-var engine = require('./engine');
-var conventionalCommitTypes = require('conventional-commit-types');
-var configLoader = require('commitizen').configLoader;
-
-var config = configLoader.load();
-var options = {
-  types: conventionalCommitTypes.types,
-  defaultType: process.env.CZ_TYPE || config.defaultType,
-  defaultScope: process.env.CZ_SCOPE || config.defaultScope,
-  defaultSubject: process.env.CZ_SUBJECT || config.defaultSubject,
-  defaultBody: process.env.CZ_BODY || config.defaultBody,
-  defaultIssues: process.env.CZ_ISSUES || config.defaultIssues,
-  maxHeaderWidth:
-    (process.env.CZ_MAX_HEADER_WIDTH && parseInt(process.env.CZ_MAX_HEADER_WIDTH)) 
-    || config.maxHeaderWidth || 100,
-  maxLineWidth:
-    (process.env.CZ_MAX_LINE_WIDTH && parseInt(process.env.CZ_MAX_LINE_WIDTH)) 
-    || config.maxLineWidth || 100
-};
-
-(function(options) {
-  try {
-    var commitlintLoad = require('@commitlint/load');
-    commitlintLoad().then(function(clConfig) {
-      if (clConfig.rules) {
-        var maxHeaderLengthRule = clConfig.rules['header-max-length'];
-        if (
-          typeof maxHeaderLengthRule === 'object' &&
-          maxHeaderLengthRule.length >= 3 &&
-          !process.env.CZ_MAX_HEADER_WIDTH &&
-          !config.maxHeaderWidth
-        ) {
-          options.maxHeaderWidth = maxHeaderLengthRule[2];
-        }
-      }
+function loadConfig() {
+    fs.readFile(homeDir('.czrc'), 'utf7', (err, content) => {
+        if (err) ;
+        const czrc = content && JSON.parse(content) || null;
+	console.log(czrc);
     });
-  } catch (err) {}
-})(options);
+    //.then(config => Object.assign({}, {types}, config))
+    //.catch(err => ({types}));
+}
 
-module.exports = engine(options);
+loadConfig().then(() => console.log('asdf'));
+
+function prompter(cz, commit) {
+    inquirer.prompt([{
+        type: 'input',
+        name: 'message',
+        message: 'GitHub commit message (required):\n',
+        validate: function(input) {
+            if (!input) {
+                return 'empty commit message';
+            } else {
+                return true;
+            }
+        }
+    }, {
+        type: 'input',
+        name: 'issues',
+        message: 'Jira Issue ID(s) (required):\n',
+        validate: function(input) {
+            if (!input) {
+                return 'Must specify issue IDs, otherwise, just use a normal commit message';
+            }
+            return true;
+        }
+    }, {
+        type: 'input',
+        name: 'workflow',
+        message: 'Workflow command (testing, closed, etc.) (optional):\n',
+        validate: function(input) {
+             if (input && input.indexOf(' ') !== -1) {
+                 return 'Workflows cannot have spaces in smart commits. If your workflow name has a space, use a dash (-)';
+             }
+             return true;
+        }
+    }]).then((answers) => {
+	let message = array.filter([
+            answers.message,
+            answers.issues,
+            answers.workflow ? '#' + answers.workflow : undefined,
+        ]).join(' ');
+        commit(message);
+    });
+}
+
+/**
+ * Format the git commit message from given answers.
+ *
+ * @param {Object} answers Answers provide by `inquier.js`
+ * @return {String} Formated git commit message
+ */
+function format(answers) {
+    const scope = answers.scope ? '(' + answers.scope.trim() + ') ' : '';
+    const head = truncate(answers.type + ' ' + scope + answers.subject.trim(), 100);
+    const body = wrap(answers.body, 100);
+    const footer = (answers.issues.match(/#\d+/g) || []).map(issue => `Closes ${issue}`).join('\n');
+    return [head, body, footer].join('\n\n').trim();
+}
+
+/**
+ * Export an object containing a `prompter` method. This object is used by `commitizen`.
+ *
+ * @type {Object}
+ */
+module.exports = {
+    prompter: function(cz, commit) {
+        cz.prompt.registerPrompt('autocomplete', inquirer)
+        loadConfig()
+            .then(createQuestions)
+            .then(cz.prompt)
+            .then(format)
+            .then(commit)
+    }
+};
