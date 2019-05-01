@@ -1,55 +1,12 @@
 const inquirer = require('inquirer-autocomplete-prompt');
 const truncate = require('cli-truncate');
 const wrap = require('wrap-ansi');
-const fuse = require('fuse.js');
 const pad = require('pad');
 const CZRC = require('./CZRC.js');
 const questionBuilder = require('./question_builder.js');
 
 function loadCZRC() {
 	return new Promise(resolve => resolve(CZRC.loadFromDefaultFile()));
-}
-
-function prompter(cz, commit) {
-	inquirer.prompt([{
-		type: 'input',
-		name: 'message',
-		message: 'GitHub commit message (required):\n',
-		validate: function(input) {
-			if (!input) {
-				return 'empty commit message';
-			} else {
-				return true;
-			}
-		}
-	}, {
-		type: 'input',
-		name: 'issues',
-		message: 'Jira Issue ID(s) (required):\n',
-		validate: function(input) {
-			if (!input) {
-				return 'Must specify issue IDs, otherwise, just use a normal commit message';
-			}
-			return true;
-		}
-	}, {
-		type: 'input',
-		name: 'workflow',
-		message: 'Workflow command (testing, closed, etc.) (optional):\n',
-		validate: function(input) {
-			if (input && input.indexOf(' ') !== -1) {
-				return 'Workflows cannot have spaces in smart commits. If your workflow name has a space, use a dash (-)';
-			}
-			return true;
-		}
-	}]).then((answers) => {
-		let message = array.filter([
-			answers.message,
-			answers.issues,
-			answers.workflow ? '#' + answers.workflow : undefined,
-		]).join(' ');
-		commit(message);
-	});
 }
 
 /**

@@ -1,3 +1,5 @@
+const fuse = require('fuse.js');
+
 function getEmojiChoices({ types, symbol }) {
     const maxNameLength = types.reduce(
         (maxLength, type) => (type.name.length > maxLength ? type.name.length : maxLength
@@ -18,7 +20,7 @@ function getEmojiChoices({ types, symbol }) {
  * @private
  */
 function build(czrc) {
-    const choices = getEmojiChoices(czrc)
+    const choices = getEmojiChoices(czrc);
     const fuzzy = new fuse(choices, {
         shouldSort: true,
         threshold: 0.4,
@@ -27,7 +29,7 @@ function build(czrc) {
         maxPatternLength: 32,
         minMatchCharLength: 1,
         keys: ["name", "code"]
-    })
+    });
 
     return [
         {
@@ -59,9 +61,9 @@ function build(czrc) {
             name: 'body',
             message: 'Provide a longer description:'
         }
-    ]
+    ];
 }
 
 module.export = {
-    create: create
+    build: build
 };
