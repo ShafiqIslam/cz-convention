@@ -11,13 +11,13 @@ function getEmojiChoices({ types, symbol }) {
 }
 
 /**
- * Create questions object from CZRC
+ * Build questions object from CZRC
  *
  * @param {CZRC} Loaded czrc.
  * @return {Array} Return an array of `inquier.js` questions
  * @private
  */
-function create(czrc) {
+function build(czrc) {
     const choices = getEmojiChoices(czrc)
     const fuzzy = new fuse(choices, {
         shouldSort: true,
