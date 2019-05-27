@@ -7,7 +7,7 @@ CZRC.prototype.loadFromObject = function (czrc) {
 	this.scopes = czrc ? czrc.scopes : [];  
 	this.issueTrackers = czrc ? czrc.issueTrackers : [];  
 	this.authors = czrc ? czrc.authors : [];  
-}
+};
 
 CZRC.prototype.loadFromDefaultFile = function() {
 	const homeDir = require('home-dir');
@@ -20,3 +20,5 @@ CZRC.prototype.loadFromFile = function(file) {
 	czrc = czrc && JSON.parse(czrc) || null;
 	this.loadFromObject(czrc);
 };
+
+module.exports = CZRC;

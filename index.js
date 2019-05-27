@@ -1,27 +1,16 @@
-const inquirer = require('inquirer-autocomplete-prompt');
-const truncate = require('cli-truncate');
-const wrap = require('wrap-ansi');
-const pad = require('pad');
 const CZRC = require('./CZRC.js');
 const questionBuilder = require('./question_builder.js');
+let czrc = new CZRC();
+czrc.loadFromDefaultFile();
+const format = require('./formatter.js')(czrc);
 
 function loadCZRC() {
-	return new Promise(resolve => resolve(CZRC.loadFromDefaultFile()));
+	return new Promise(resolve => resolve(czrc));
 }
 
-/**
- * Format the git commit message from given answers.
- *
- * @param {Object} answers Answers provide by `inquier.js`
- * @return {String} Formated git commit message
- */
-function format(answers) {
-	const scope = answers.scope ? '(' + answers.scope.trim() + ') ' : '';
-	const head = truncate(answers.type + ' ' + scope + answers.subject.trim(), 100);
-	const body = wrap(answers.body, 100);
-	const footer = (answers.issues.match(/#\d+/g) || []).map(issue => `Closes ${issue}`).join('\n');
-	return [head, body, footer].join('\n\n').trim();
-}
+/*try {
+    loadCZRC().then(questionBuilder.build).then(require('inquirer').prompt).then(format).then((msg) => { console.log(msg); });
+} catch (e) { console.log(e); };*/
 
 /**
  * Export an object containing a `prompter` method. This object is used by `commitizen`.
@@ -30,11 +19,12 @@ function format(answers) {
  */
 module.exports = {
 	prompter: function(cz, commit) {
-		cz.prompt.registerPrompt('autocomplete', inquirer);
+		//let header = "First two questions are required. Skip other by pressing ctrl+q after providing those.\n";
+        //console.log('\x1b[33m%s\x1b[0m', header);
 		loadCZRC()
 			.then(questionBuilder.build)
 			.then(cz.prompt)
 			.then(format)
-			.then(commit)
+			.then(commit);
 	}
 };
