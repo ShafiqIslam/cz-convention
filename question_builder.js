@@ -1,55 +1,31 @@
-const pad = require('pad');
-const fuzzy = require('fuzzy');
-const readline = require('readline');
-const robot = require("robotjs");
+let inquirer = require('inquirer');
+let recursor = require('inquirer-recursive');
+let skipper = require('./skipper.js');
 
-let skip = false;
-readline.emitKeypressEvents(process.stdin);
-process.stdin.setRawMode(true);
-process.stdin.on('keypress', (ch, key) => {
-	if(key.ctrl && key.name === 'q') {
-		skip = true;
-		robot.keyTap('enter');
-	}
-});
-function shouldNotSkip() {
-	return !skip;
-}
+recursor.prototype.askForLoop = function() {
+	inquirer.prompt({
+    	default: this.opt.skipable || false,
+		type:'confirm',
+		name: 'loop',
+		message: this.opt.message || 'Would you like to loop ?',
+		when: !(this.opt.skipable && skipper.shouldSkip())
+	}).then(function (result) {
+		if(result.loop) {
+			this.askNestedQuestion();
+		} else {
+			this.done( this.responses );
+    	}                                                
+	}.bind(this));
+};
 
-let czrc = null;
-
-function getEmojiChoices(symbol) {
-    let types = czrc.types;
-    const max_name_length = types.reduce(
-        (max, type) => (type.name.length > max ? type.name.length : max), 0
-    );
-    const max_emoji_length = types.reduce(
-        (max, type) => (type.emoji.length > max ? type.emoji.length : max), 0
-    );
-
-    return types.map(choice => ({
-        name: `${pad(choice.name, max_name_length)}  ${pad(choice.emoji, max_emoji_length)}  ${choice.description.trim()}`,
-        value: choice,
-        code: choice.code
-    }));
-}
-
-function search(choices, input) {
-	input = input || '';
-	return new Promise(function(resolve) {
-		setTimeout(function() {
-			var fuzzyResult = fuzzy.filter(input, choices);
-			resolve(
-				fuzzyResult.map(function(el) {
-					return el.original;
-				})
-			);
-		}, Math.floor(Math.random() * (500 - 30 + 1)) + 30);
-	});
-}
-
-function searchTypes(answers, input) {
-	return search(czrc.types);
+recursor.prototype._run = function ( cb ) {
+	this.done = cb;
+    if(this.opt.ask_question_first) {
+        this.askNestedQuestion();
+    } else {
+    	this.askForLoop();
+    }
+    return this;
 }
 
 /**
@@ -59,62 +35,97 @@ function searchTypes(answers, input) {
  * @return {Array} Return an array of `inquier.js` questions
  * @private
  */
-function build(_czrc) {
-	czrc = _czrc;
-    const choices = getEmojiChoices(true);
+function build(czrc) {
+    const choices = czrc.formatTypesWithEmoji();
 
     return [
         {
-            type: 'list',
-            name: 'type',
-            message: "Type of commit:",
-            choices: choices
+            questions: [{
+                type: 'list',
+                name: 'type',
+                message: "Type of commit:",
+                choices: choices
+            }],
+            recursive: true,
+            name: 'types',
+			ask_question_first: true,
+            recursion_message: 'Add another type:'
         },
         {
-            type: 'input',
-            name: 'subject',
-            message: 'This commit will:',
+            questions: [{
+                type: 'input',
+                name: 'subject',
+                message: 'This commit will:'
+            }],
+            recursive: false
         },
         {
-			type: czrc.scopes ? 'list' : 'input',
-			name: 'scope',
-			message: 'Scope of this commit:',
-			choices: czrc.scopes && [{ name: '[none]', value: '' }].concat(czrc.scopes),
-			when: shouldNotSkip
+            questions: [{
+                type: czrc.scopes ? 'list' : 'input',
+                name: 'scope',
+                message: 'Scope of this commit:',
+                choices: czrc.scopes && [{ name: '[none]', value: '' }].concat(czrc.scopes),
+                when: skipper.shouldNotSkip()
+            }],
+            recursive: true,
+			skipable: true,
+            name: 'scopes',
+            recursion_message: 'Add scope:'
+        },
+        {
+            questions: [{
+                type: 'input',
+                name: 'why',
+                message: 'This commit is being made becasuse:',
+                when: skipper.shouldNotSkip()
+            }, {
+                type: 'input',
+                name: 'what',
+                message: 'This commit addresses the WHY by doing:',
+                when: skipper.shouldNotSkip()
+            }],
+            recursive: false
+        },
+		{
+			questions: [{
+                type: 'input',
+                name: 'ticket',
+                message: 'This commit addresses ticket:',
+                when: skipper.shouldNotSkip()
+			}],
+			recursive: true,
+			skipable: true,
+			name: 'tickets',
+            recursion_message: 'Add ticket:'
 		},
         {
-            type: 'input',
-            name: 'why',
-            message: 'This commit is being made becasuse:',
-			when: shouldNotSkip
+            questions: [{
+				type: 'input',
+            	name: 'references',
+            	message: 'This commit took references from:',
+                when: skipper.shouldNotSkip()
+			}],
+			recursive: true,
+			skipable: true,
+			name: 'references',
+			recursion_message: 'Add reference:'
         },
         {
-            type: 'input',
-            name: 'what',
-            message: 'This commit addresses the WHY by doing:',
-			when: shouldNotSkip
-        },
-        {
-            type: 'input',
-            name: 'tickets',
-            message: 'This commit addresses ticket(s):',
-			when: shouldNotSkip
-        },
-        {
-            type: 'input',
-            name: 'references',
-            message: 'This commit took references from:',
-			when: shouldNotSkip
-        },
-        {
-            type: 'input',
-            name: 'co_authors',
-            message: 'Co-authored by:',
-			when: shouldNotSkip
-        }
+            questions: [{
+				type: 'input',
+            	name: 'co_author',
+            	message: 'Co-authored by:',
+                when: skipper.shouldNotSkip()
+			}],
+			recursive: true,
+			skipable: true,
+			name: 'co_authors',
+			recursion_message: 'Add co-author:'
+		}
     ];
 }
 
 module.exports = {
-    build: build
+    buildPrompts: build,
+	recursor: recursor
 };

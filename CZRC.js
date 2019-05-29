@@ -1,3 +1,5 @@
+const pad = require('pad');
+
 function CZRC(czrc) {
 	this.loadFromObject(czrc);
 }
@@ -20,5 +22,25 @@ CZRC.prototype.loadFromFile = function(file) {
 	czrc = czrc && JSON.parse(czrc) || null;
 	this.loadFromObject(czrc);
 };
+
+CZRC.prototype.getPromise = function() {
+    return new Promise(resolve => resolve(this));
+};
+
+CZRC.prototype.formatTypesWithEmoji = function() {
+    let types = this.types;
+    const max_name_length = types.reduce(
+        (max, type) => (type.name.length > max ? type.name.length : max), 0
+    );
+    const max_emoji_length = types.reduce(
+        (max, type) => (type.emoji.length > max ? type.emoji.length : max), 0
+    );
+
+    return types.map(choice => ({
+        name: `${pad(choice.name, max_name_length)}  ${pad(choice.emoji, max_emoji_length)}  ${choice.description.trim()}`,
+        value: choice,
+        code: choice.code
+    }));
+}
 
 module.exports = CZRC;
