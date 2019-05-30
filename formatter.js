@@ -1,7 +1,13 @@
 const truncate = require('cli-truncate');
 const wrap = require('wrap-ansi');
+require('./helpers.js');
 
-let czrc = null;
+let _czrc = null;
+let _answers = null;
+
+let wrap_body = function(s) {
+	return wrap(s, _czrc.bodyMaxLength);
+};
 
 /**
  * Format the git commit message from given answers.
@@ -10,29 +16,70 @@ let czrc = null;
  * @return {String} Formated git commit message
  */
 function format(answers) {
-    let subject_length = czrc.subject_max_length || 72;
-    let body_length = czrc.body_max_length || 80;
-
-    String.prototype.ucFirst = function () {
-        return this.charAt(0).toUpperCase() + this.slice(1);
-    };
-
+    _answers = answers;
+return _answers;
     let answer_segments = [];
-    let subject = answers.type.emoji + (answers.type.emoji.length == 1 ? ' ' : '  ') + answers.subject.trim().ucFirst();
-    answer_segments.push(truncate(subject, subject_length));
-    answer_segments.push('Type(s): ' + answers.type.name);
-
-    if(answers.scope) answer_segments.push('Scope(s): ' + answers.scope.trim());
-    if(answers.why) answer_segments.push('Why:\n' + wrap(answers.why, body_length));
-    if(answers.what) answer_segments.push('What:\n' + wrap(answers.what, body_length));
-    if(answers.tickets) answer_segments.push('Ticket(s):\n' + wrap(answers.tickets, body_length));
-    if(answers.references) answer_segments.push('Reference(s):\n' + wrap(answers.references, body_length));
-    if(answers.co_authors) answer_segments.push('Co Authored By:\n' + wrap(answers.co_authors, body_length));
-
+    answer_segments.push(formatSubject());
+    answer_segments.push('Type(s): ' + formatTypes());
+    if(_answers.scopes.length) answer_segments.push('Scope(s): ' + formatScopes());
+    if(_answers.why) answer_segments.push('Why:\n' + wrap_body(_answers.why));
+    if(_answers.what) answer_segments.push('What:\n' + wrap_body(_answers.what));
+    if(_answers.tickets.length) answer_segments.push('Ticket(s):' + formatTickets());
+    if(_answers.references.length) answer_segments.push('Reference(s):' + formatReferences());
+    if(_answers.co_authors.length) answer_segments.push('Co Authored By:' + formatCoAuthors());
     return answer_segments.join('\n\n');
 }
 
-module.exports = function(_czrc) {
-    czrc = _czrc;
+function formatSubject() {
+    let emojis = '';
+    _answers.types.forEach(function(type) {
+        emojis += type.type.emoji + (type.type.emoji.length == 1 ? ' ' : '  ');
+    });
+    let subject = emojis + _answers.subject.trimAny('. ').ucFirst();
+    return truncate(subject, _czrc.subjectMaxLength);
+}
+
+function formatTypes() {
+    let types = '';
+    _answers.types.forEach(function(type) {
+        types += type.type.name + ', ';
+    });
+    return types.trimAny(', ');
+}
+
+function formatScopes() {
+	let scopes = '';
+	_answers.scopes.forEach(function(scope) {
+		scopes += scope.scope + ', ';
+    });
+	return scopes.trimAny(', ');
+}
+
+function formatTickets() {
+	let tickets = '';
+	_answers.tickets.forEach(function(ticket) {
+		tickets += '\n- ' + ticket.ticket;
+	});
+	return tickets;
+}
+
+function formatCoAuthors() {
+	let co_authors = '';
+	_answers.co_authors.forEach(function(author) {
+		co_authors += '\n- ' + author.co_author.name + ' <' + author.co_author.email + '>';
+	});
+	return co_authors;
+}
+
+function formatReferences() {
+	let references = '';
+	_answers.references.forEach(function(reference) {
+		references += '\n' + wrap_body('- ' + reference.reference);
+	});
+	return references;
+}
+
+module.exports = function(czrc) {
+    _czrc = czrc;
     return format;
 };

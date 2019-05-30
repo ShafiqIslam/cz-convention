@@ -1,32 +1,4 @@
-let inquirer = require('inquirer');
-let recursor = require('inquirer-recursive');
-let skipper = require('./skipper.js');
-
-recursor.prototype.askForLoop = function() {
-	inquirer.prompt({
-    	default: this.opt.skipable || false,
-		type:'confirm',
-		name: 'loop',
-		message: this.opt.message || 'Would you like to loop ?',
-		when: !(this.opt.skipable && skipper.shouldSkip())
-	}).then(function (result) {
-		if(result.loop) {
-			this.askNestedQuestion();
-		} else {
-			this.done( this.responses );
-    	}                                                
-	}.bind(this));
-};
-
-recursor.prototype._run = function ( cb ) {
-	this.done = cb;
-    if(this.opt.ask_question_first) {
-        this.askNestedQuestion();
-    } else {
-    	this.askForLoop();
-    }
-    return this;
-}
+let _skipper = null;
 
 /**
  * Build questions object from CZRC
@@ -36,15 +8,13 @@ recursor.prototype._run = function ( cb ) {
  * @private
  */
 function build(czrc) {
-    const choices = czrc.formatTypesWithEmoji();
-
     return [
         {
             questions: [{
                 type: 'list',
                 name: 'type',
                 message: "Type of commit:",
-                choices: choices
+                choices: czrc.formatTypesWithEmoji()
             }],
             recursive: true,
             name: 'types',
@@ -65,7 +35,7 @@ function build(czrc) {
                 name: 'scope',
                 message: 'Scope of this commit:',
                 choices: czrc.scopes && [{ name: '[none]', value: '' }].concat(czrc.scopes),
-                when: skipper.shouldNotSkip()
+                when: _skipper.shouldNotSkip
             }],
             recursive: true,
 			skipable: true,
@@ -77,12 +47,12 @@ function build(czrc) {
                 type: 'input',
                 name: 'why',
                 message: 'This commit is being made becasuse:',
-                when: skipper.shouldNotSkip()
+                when: _skipper.shouldNotSkip
             }, {
                 type: 'input',
                 name: 'what',
                 message: 'This commit addresses the WHY by doing:',
-                when: skipper.shouldNotSkip()
+                when: _skipper.shouldNotSkip
             }],
             recursive: false
         },
@@ -91,7 +61,7 @@ function build(czrc) {
                 type: 'input',
                 name: 'ticket',
                 message: 'This commit addresses ticket:',
-                when: skipper.shouldNotSkip()
+                when: _skipper.shouldNotSkip
 			}],
 			recursive: true,
 			skipable: true,
@@ -101,9 +71,9 @@ function build(czrc) {
         {
             questions: [{
 				type: 'input',
-            	name: 'references',
+            	name: 'reference',
             	message: 'This commit took references from:',
-                when: skipper.shouldNotSkip()
+                when: _skipper.shouldNotSkip
 			}],
 			recursive: true,
 			skipable: true,
@@ -112,10 +82,11 @@ function build(czrc) {
         },
         {
             questions: [{
-				type: 'input',
+				type: 'autocomplete',
             	name: 'co_author',
             	message: 'Co-authored by:',
-                when: skipper.shouldNotSkip()
+                source: czrc.searchAuthor.bind(czrc),
+                when: _skipper.shouldNotSkip
 			}],
 			recursive: true,
 			skipable: true,
@@ -125,7 +96,9 @@ function build(czrc) {
     ];
 }
 
-module.exports = {
-    buildPrompts: build,
-	recursor: recursor
+module.exports = function(skipper) {
+    _skipper = skipper;
+    return {
+        buildPrompts: build
+    };
 };

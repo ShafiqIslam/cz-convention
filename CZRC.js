@@ -1,4 +1,5 @@
 const pad = require('pad');
+const fuzzy = require('fuzzy');
 
 function CZRC(czrc) {
 	this.loadFromObject(czrc);
@@ -6,14 +7,17 @@ function CZRC(czrc) {
 
 CZRC.prototype.loadFromObject = function (czrc) {
 	this.types = czrc ? czrc.types : [];  
-	this.scopes = czrc ? czrc.scopes : [];  
-	this.issueTrackers = czrc ? czrc.issueTrackers : [];  
+	this.ticketTrackers = czrc ? czrc.ticket_trackers : [];  
 	this.authors = czrc ? czrc.authors : [];  
+	this.scopes = czrc ? czrc.scopes : [];  
+	this.subjectMaxLength = czrc ? czrc.subject_max_length : 72;  
+	this.bodyMaxLength = czrc ? czrc.body_max_length : 80;  
 };
 
-CZRC.prototype.loadFromDefaultFile = function() {
+CZRC.prototype.load = function() {
 	const homeDir = require('home-dir');
 	this.loadFromFile(homeDir('.czrc.json'));
+    this.loadScopesFromProject();
 };
 
 CZRC.prototype.loadFromFile = function(file) {
@@ -21,6 +25,10 @@ CZRC.prototype.loadFromFile = function(file) {
 	let czrc = read(file, 'utf8');
 	czrc = czrc && JSON.parse(czrc) || null;
 	this.loadFromObject(czrc);
+};
+
+CZRC.prototype.loadScopesFromProject = function() {
+    this.scopes = ['payment', 'wallet', 'voucher'];
 };
 
 CZRC.prototype.getPromise = function() {
@@ -36,11 +44,28 @@ CZRC.prototype.formatTypesWithEmoji = function() {
         (max, type) => (type.emoji.length > max ? type.emoji.length : max), 0
     );
 
-    return types.map(choice => ({
-        name: `${pad(choice.name, max_name_length)}  ${pad(choice.emoji, max_emoji_length)}  ${choice.description.trim()}`,
-        value: choice,
-        code: choice.code
+    return types.map(type => ({
+        name: `${pad(type.name, max_name_length)}  ${pad(type.emoji, max_emoji_length)}  ${type.description.trim()}`,
+        value: type,
+        code: type.code
     }));
-}
+};
+
+CZRC.prototype.searchAuthor = function(answers, input) {
+    input = input || '';
+    let authors = this.authors.map(author => author.name);
+    return new Promise(function(resolve) {
+        setTimeout(function() {
+            var fuzzy_result = fuzzy.filter(input, authors);
+            resolve(fuzzy_result.map(el => el.original));
+        }, Math.random() * (500 - 30) + 30);
+    });
+};
+
+CZRC.prototype.getAuthorByName = function(name) {
+    for(let i=0; i<this.authors.length; i++) {
+        if(this.authors[i].name === name) return this.authors[i];
+    }
+};
 
 module.exports = CZRC;
