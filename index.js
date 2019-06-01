@@ -39,7 +39,7 @@ function prompter(inquirer, callback) {
 }
 
 //try {
-    // prompter(require('inquirer'), function(msg) { console.log(msg); console.dir(msg, {depth: null}); });
+//    prompter(require('inquirer'), function(msg) { console.log(msg); console.dir(msg, {depth: null}); });
 //} catch (e) { console.log(e); };
 
 

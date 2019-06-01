@@ -20,12 +20,25 @@ function format(answers) {
     let answer_segments = [];
     answer_segments.push(formatSubject());
     answer_segments.push('Type(s): ' + formatTypes());
-    if(_answers.scopes && _answers.scopes.length) answer_segments.push('Scope(s): ' + formatScopes());
+    if(_answers.scopes && _answers.scopes.length) {
+        let s = formatScopes(); 
+        if(s) answer_segments.push('Scope(s): ' + s);
+    }
     if(_answers.why) answer_segments.push('Why:\n' + wrap_body(_answers.why));
     if(_answers.what) answer_segments.push('What:\n' + wrap_body(_answers.what));
-    if(_answers.tickets && _answers.tickets.length) answer_segments.push('Ticket(s):' + formatTickets());
-    if(_answers.references && _answers.references.length) answer_segments.push('Reference(s):' + formatReferences());
-    if(_answers.co_authors && _answers.co_authors.length) answer_segments.push('Co Authored By:' + formatCoAuthors());
+
+    if(_answers.tickets && _answers.tickets.length) {
+        let t = formatTickets();
+        if(t) answer_segments.push('Ticket(s):' + t);
+    }
+    if(_answers.references && _answers.references.length) {
+        let r = formatReferences(); 
+        if(r) answer_segments.push('Reference(s):' + r);
+    }
+    if(_answers.co_authors && _answers.co_authors.length) {
+        let a = formatCoAuthors(); 
+        if(a) answer_segments.push('Co Authored By:' + a);
+    }
     return answer_segments.join('\n\n');
 }
 
@@ -49,7 +62,7 @@ function formatTypes() {
 function formatScopes() {
 	let scopes = '';
 	_answers.scopes.forEach(function(scope) {
-		scopes += scope.scope + ', ';
+        if(scope.scope) scopes += scope.scope + ', ';
     });
 	return scopes.trimAny(', ');
 }
@@ -58,8 +71,10 @@ function formatTickets() {
     let programs = {};
 	_answers.tickets.forEach(function(ticket) {
         let program = ticket.tracker;
-        if(!programs.hasOwnProperty(program)) programs[program] = '';
-        programs[program] += ticket.ticket_id + ', '; 
+        if(ticket.tracker && ticket.ticket_id) {
+            if(!programs.hasOwnProperty(program)) programs[program] = '';
+            programs[program] += ticket.ticket_id + ', '; 
+        }
 	});
 	let tickets = '';
     for(program in programs) {
@@ -80,7 +95,7 @@ function formatCoAuthors() {
 function formatReferences() {
 	let references = '';
 	_answers.references.forEach(function(reference) {
-		references += '\n' + wrap_body('- ' + reference.reference);
+		if(reference.reference) references += '\n' + wrap_body('- ' + reference.reference);
 	});
 	return references;
 }
