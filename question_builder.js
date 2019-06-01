@@ -21,7 +21,7 @@ function build(czrc) {
 			ask_question_first: true,
             recursion_message: 'Add another type:'
         },
-        {
+        { 
             questions: [{
                 type: 'input',
                 name: 'subject',
@@ -33,15 +33,39 @@ function build(czrc) {
             questions: [{
                 type: czrc.scopes ? 'list' : 'input',
                 name: 'scope',
-                message: 'Scope of this commit:',
+                message: 'Add scope:',
                 choices: czrc.scopes && [{ name: '[none]', value: '' }].concat(czrc.scopes),
                 when: _skipper.shouldNotSkip
             }],
             recursive: true,
 			skipable: true,
             name: 'scopes',
-            recursion_message: 'Add scope:'
+			ask_question_first: true,
+            skip_if_empty: 'scope',
+            recursion_message: 'Add another scope:'
         },
+        {
+			questions: [{
+                type: 'list',
+                name: 'tracker',
+                message: 'Add ticket:',
+                choices: [{ name: '[nope]', value: '' }].concat(czrc.ticketTrackers),
+                when: _skipper.shouldNotSkip
+			}, {
+                type: 'input',
+                name: 'ticket_id',
+                message: 'Ticket ID:',
+                when: function(answers) {
+                    return answers.tracker !== '' && _skipper.shouldNotSkip();
+                }
+            }],
+			recursive: true,
+			skipable: true,
+			name: 'tickets',
+			ask_question_first: true,
+            skip_if_empty: 'tracker',
+            recursion_message: 'Add ticket:'
+		},
         {
             questions: [{
                 type: 'input',
@@ -56,29 +80,19 @@ function build(czrc) {
             }],
             recursive: false
         },
-		{
-			questions: [{
-                type: 'input',
-                name: 'ticket',
-                message: 'This commit addresses ticket:',
-                when: _skipper.shouldNotSkip
-			}],
-			recursive: true,
-			skipable: true,
-			name: 'tickets',
-            recursion_message: 'Add ticket:'
-		},
         {
             questions: [{
 				type: 'input',
             	name: 'reference',
-            	message: 'This commit took references from:',
+            	message: 'Add reference:',
                 when: _skipper.shouldNotSkip
 			}],
 			recursive: true,
 			skipable: true,
 			name: 'references',
-			recursion_message: 'Add reference:'
+			ask_question_first: true,
+            skip_if_empty: 'reference',
+			recursion_message: 'Add another reference:'
         },
         {
             questions: [{

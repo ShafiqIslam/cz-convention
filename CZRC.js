@@ -1,5 +1,7 @@
 const pad = require('pad');
 const fuzzy = require('fuzzy');
+const fs = require('fs');
+const read = fs.readFileSync;
 
 function CZRC(czrc) {
 	this.loadFromObject(czrc);
@@ -21,14 +23,20 @@ CZRC.prototype.load = function() {
 };
 
 CZRC.prototype.loadFromFile = function(file) {
-	const read = require('fs').readFileSync;
 	let czrc = read(file, 'utf8');
 	czrc = czrc && JSON.parse(czrc) || null;
 	this.loadFromObject(czrc);
 };
 
 CZRC.prototype.loadScopesFromProject = function() {
-    this.scopes = ['payment', 'wallet', 'voucher'];
+    let own_package_json = __dirname + '/package.json';
+    let project_package_json = __dirname + '../../../package.json';
+    if(fs.existsSync(project_package_json)) {
+        this.scopes = JSON.parse(read(project_package_json, 'utf8')).czrcScopes;
+        return;
+    }
+
+    this.scopes = JSON.parse(read(own_package_json, 'utf8')).czrcScopes;
 };
 
 CZRC.prototype.getPromise = function() {

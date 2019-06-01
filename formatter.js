@@ -17,16 +17,15 @@ let wrap_body = function(s) {
  */
 function format(answers) {
     _answers = answers;
-return _answers;
     let answer_segments = [];
     answer_segments.push(formatSubject());
     answer_segments.push('Type(s): ' + formatTypes());
-    if(_answers.scopes.length) answer_segments.push('Scope(s): ' + formatScopes());
+    if(_answers.scopes && _answers.scopes.length) answer_segments.push('Scope(s): ' + formatScopes());
     if(_answers.why) answer_segments.push('Why:\n' + wrap_body(_answers.why));
     if(_answers.what) answer_segments.push('What:\n' + wrap_body(_answers.what));
-    if(_answers.tickets.length) answer_segments.push('Ticket(s):' + formatTickets());
-    if(_answers.references.length) answer_segments.push('Reference(s):' + formatReferences());
-    if(_answers.co_authors.length) answer_segments.push('Co Authored By:' + formatCoAuthors());
+    if(_answers.tickets && _answers.tickets.length) answer_segments.push('Ticket(s):' + formatTickets());
+    if(_answers.references && _answers.references.length) answer_segments.push('Reference(s):' + formatReferences());
+    if(_answers.co_authors && _answers.co_authors.length) answer_segments.push('Co Authored By:' + formatCoAuthors());
     return answer_segments.join('\n\n');
 }
 
@@ -56,17 +55,24 @@ function formatScopes() {
 }
 
 function formatTickets() {
-	let tickets = '';
+    let programs = {};
 	_answers.tickets.forEach(function(ticket) {
-		tickets += '\n- ' + ticket.ticket;
+        let program = ticket.tracker;
+        if(!programs.hasOwnProperty(program)) programs[program] = '';
+        programs[program] += ticket.ticket_id + ', '; 
 	});
+	let tickets = '';
+    for(program in programs) {
+        tickets += '\n- ' + program + ': ' + programs[program].trimAny(', ');
+    }
 	return tickets;
 }
 
 function formatCoAuthors() {
 	let co_authors = '';
 	_answers.co_authors.forEach(function(author) {
-		co_authors += '\n- ' + author.co_author.name + ' <' + author.co_author.email + '>';
+        let co_author = _czrc.getAuthorByName(author.co_author);
+		co_authors += '\n- ' + co_author.name + ' <' + co_author.email + '>';
 	});
 	return co_authors;
 }

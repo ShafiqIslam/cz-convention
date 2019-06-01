@@ -26,8 +26,13 @@ recursor.prototype.askForLoop = function() {
 
 recursor.prototype.askNestedQuestion = function() {
     inquirer.prompt(this.opt.prompts).then(function (result) {
-        this.responses.push(result);
-        if(!(this.opt.ask_question_first && result === '')) {
+        if(this.opt.ask_question_first && this.opt.skip_if_empty && result[this.opt.skip_if_empty] !== '') {
+            this.responses.push(result);
+            this.askNestedQuestion();
+        } else if(this.opt.ask_question_first && this.opt.skip_if_empty && result[this.opt.skip_if_empty] === '') {
+            this.done(this.responses);
+        } else {
+            this.responses.push(result);
             this.askForLoop();
         }
     }.bind(this));
