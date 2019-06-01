@@ -9,21 +9,37 @@ npm install -g commitizen
 
 # Install this adapter
 
-1. ```npm install @sheba/cz-convention.```
+```
+npm install @sheba/cz-convention
+```
 
 # Use this adapter
 
-Then, use commitizen to init
+Reference it in your `package.json` of your project
 ```
-commitizen init cz-convention
-```
-or, reference it in your `.cz.json` of your project
-```
-{
-  "path": "node_modules/cz-convention/"
-}
+  ...
+  "config": {
+    "commitizen": {
+      "path": "node_modules/@sheba/cz-convention/"
+    }
+  }
+  ...
 ```
 
 # Usage
+Traditionally,
 
-.....
+```
+git cz
+```
+With [husky](https://github.com/typicode/husky)
+```
+// .huskyrc
+{
+  "hooks": {
+    ...
+    "prepare-commit-msg": "exec < /dev/tty && git cz --hook",
+    ...
+  }
+}
+```
