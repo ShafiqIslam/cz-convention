@@ -29,7 +29,7 @@ Traditionally,
 ```
 git cz
 ```
-With [husky](https://github.com/typicode/husky), in your runcom `(.huskyrc)`:
+With [husky](https://github.com/typicode/husky), in your runcom `.huskyrc` or `.huskyrc.js`:
 ```
 {
   "hooks": {
