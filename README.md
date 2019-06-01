@@ -12,10 +12,7 @@ npm install -g commitizen
 ```
 npm install @sheba/cz-convention
 ```
-
-# Use this adapter
-
-Reference it in your `package.json` of your project
+Then, Reference it in your `package.json` of your project
 ```
   ...
   "config": {
@@ -32,9 +29,8 @@ Traditionally,
 ```
 git cz
 ```
-With [husky](https://github.com/typicode/husky)
+With [husky](https://github.com/typicode/husky), in your runcom `(.huskyrc)`:
 ```
-// .huskyrc
 {
   "hooks": {
     ...
