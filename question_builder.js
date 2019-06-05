@@ -49,22 +49,22 @@ function build(czrc) {
                 type: 'list',
                 name: 'tracker',
                 message: 'Add ticket:',
-                choices: [{ name: '[nope]', value: '' }].concat(czrc.ticketTrackers),
+                choices: [{ name: '[nope]', value: '' }].concat(czrc.issueTrackers),
                 when: _skipper.shouldNotSkip
 			}, {
                 type: 'input',
-                name: 'ticket_id',
-                message: 'Ticket ID:',
+                name: 'issue_id',
+                message: 'Issue ID:',
                 when: function(answers) {
                     return answers.tracker !== '' && _skipper.shouldNotSkip();
                 }
             }],
 			recursive: true,
 			skipable: true,
-			name: 'tickets',
+			name: 'issues',
 			ask_question_first: true,
             skip_if_empty: 'tracker',
-            recursion_message: 'Add ticket:'
+            recursion_message: 'Add issue:'
 		},
         {
             questions: [{
