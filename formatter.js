@@ -27,17 +27,17 @@ function format(answers) {
     if(_answers.why) answer_segments.push('Why:\n' + wrap_body(_answers.why));
     if(_answers.what) answer_segments.push('What:\n' + wrap_body(_answers.what));
 
-    if(_answers.tickets && _answers.tickets.length) {
-        let t = formatTickets();
-        if(t) answer_segments.push('Ticket(s):' + t);
+    if(_answers.issues && _answers.issues.length) {
+        let issues = formatIssues();
+        if(issues) answer_segments.push('Issue(s):' + issues);
     }
     if(_answers.references && _answers.references.length) {
-        let r = formatReferences(); 
-        if(r) answer_segments.push('Reference(s):' + r);
+        let refs = formatReferences(); 
+        if(refs) answer_segments.push('Reference(s):' + refs);
     }
     if(_answers.co_authors && _answers.co_authors.length) {
-        let a = formatCoAuthors(); 
-        if(a) answer_segments.push('Co Authored By:' + a);
+        let authors = formatCoAuthors(); 
+        if(authors) answer_segments.push('Co Authored By:' + authors);
     }
     return answer_segments.join('\n\n');
 }
@@ -67,20 +67,20 @@ function formatScopes() {
 	return scopes.trimAny(', ');
 }
 
-function formatTickets() {
+function formatIssues() {
     let programs = {};
-	_answers.tickets.forEach(function(ticket) {
-        let program = ticket.tracker;
-        if(ticket.tracker && ticket.ticket_id) {
+	_answers.issues.forEach(function(issue) {
+        let program = issue.tracker;
+        if(issue.tracker && issue.issue_id) {
             if(!programs.hasOwnProperty(program)) programs[program] = '';
-            programs[program] += ticket.ticket_id + ', '; 
+            programs[program] += issue.issue_id + ', '; 
         }
 	});
-	let tickets = '';
+	let issues = '';
     for(program in programs) {
-        tickets += '\n- ' + program + ': ' + programs[program].trimAny(', ');
+        issues += '\n- ' + program + ': ' + programs[program].trimAny(', ');
     }
-	return tickets;
+	return issues;
 }
 
 function formatCoAuthors() {
