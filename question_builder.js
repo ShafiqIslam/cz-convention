@@ -48,7 +48,7 @@ function build(czrc) {
 			questions: [{
                 type: 'list',
                 name: 'tracker',
-                message: 'Add ticket:',
+                message: 'Add issue:',
                 choices: [{ name: '[nope]', value: '' }].concat(czrc.issueTrackers),
                 when: _skipper.shouldNotSkip
 			}, {
