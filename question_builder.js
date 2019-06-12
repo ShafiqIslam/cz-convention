@@ -31,10 +31,10 @@ function build(czrc) {
         },
         {
             questions: [{
-                type: czrc.scopes ? 'list' : 'input',
+                type: 'list',
                 name: 'scope',
                 message: 'Add scope:',
-                choices: czrc.scopes && [{ name: '[none]', value: '' }].concat(czrc.scopes),
+                choices: [{ name: '[none]', value: '' }].concat(czrc.scopes),
                 when: _skipper.shouldNotSkip
             }],
             recursive: true,

@@ -14,16 +14,10 @@
   "author": "Shafiqul Islam <islamshafiq003@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "cli-truncate": "^1.0.0",
-    "fuse.js": "^3.2.0",
-    "fuzzy": "^0.1.3",
-    "home-dir": "^1.0.0",
     "inquirer": "^6.3.1",
     "inquirer-autocomplete-prompt": "^0.12.0",
     "inquirer-recursive": "0.0.6",
-    "pad": "^2.0.1",
     "robotjs": "^0.5.1",
-    "wrap-ansi": "^3.0.0",
     "@sheba/commit-template": "*"
   },
   "config": {

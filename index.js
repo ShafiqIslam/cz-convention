@@ -1,10 +1,10 @@
-const CZRC = require('./CZRC.js');
+const CZRC = require('@sheba/commit-template/CZRC.js');
 const skipper = require('./skipper.js');
 const questionBuilder = require('./question_builder.js')(skipper);
 const recursor = require('./recursor.js')(skipper);
 let czrc = new CZRC();
 czrc.load();
-const format = require('./formatter.js')(czrc);
+const format = require('@sheba/commit-template/formatter.js')(czrc);
 
 function prompter(inquirer, callback) {
     (async function() {
@@ -38,9 +38,9 @@ function prompter(inquirer, callback) {
     })();
 }
 
-//try {
-//    prompter(require('inquirer'), function(msg) { console.log(msg); console.dir(msg, {depth: null}); });
-//} catch (e) { console.log(e); };
+try {
+    prompter(require('inquirer'), function(msg) { console.log(msg); console.dir(msg, {depth: null}); });
+} catch (e) { console.log(e); };
 
 
 /**
