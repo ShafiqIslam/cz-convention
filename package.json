@@ -23,7 +23,8 @@
     "inquirer-recursive": "0.0.6",
     "pad": "^2.0.1",
     "robotjs": "^0.5.1",
-    "wrap-ansi": "^3.0.0"
+    "wrap-ansi": "^3.0.0",
+    "@sheba/commit-template": "*"
   },
   "config": {
     "commitizen": {
@@ -31,6 +32,8 @@
     }
   },
   "czrcScopes": [
-      "czrc", "questions", "formatting"
+    "czrc",
+    "questions",
+    "formatting"
   ]
 }
