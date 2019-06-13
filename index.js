@@ -4,6 +4,7 @@ const questionBuilder = require('./question_builder.js')(skipper);
 const recursor = require('./recursor.js')(skipper);
 let czrc = new CZRC();
 czrc.load();
+const messageBuilder = require('./message_builder.js')(czrc);
 const format = require('@sheba/commit-template/formatter.js')(czrc);
 
 function prompter(inquirer, callback) {
@@ -16,26 +17,30 @@ function prompter(inquirer, callback) {
         let answers = {};
         let prompts = questionBuilder.buildPrompts(czrc);
         for(let i=0; i<prompts.length; i++) {
-            let prompt = prompts[i];
-            let questions = prompt.questions;
-            if(prompt.recursive) {
-                questions = [{
-                    type: 'recursive',
-                    message: prompt.recursion_message,
-                    name: prompt.name,
-                    prompts: questions,
-                    skipable: prompt.skipable || false,
-                    ask_question_first: prompt.ask_question_first || false,
-                    skip_if_empty: prompt.skip_if_empty || null
-                }];
-            }
-            let answer = await inquirer.prompt(questions);
+            let answer = await inquirer.prompt(getQuestions(prompts[i]));
             for(let name in answer) {
                 answers[name] = answer[name];
             }
         }
-        callback(format(answers));
+        // console.dir(messageBuilder.build(answers), {depth: null});
+        callback(format(messageBuilder.build(answers)));
     })();
+}
+
+function getQuestions(prompt) {
+    let questions = prompt.questions;
+    if(prompt.recursive) {
+        questions = [{
+            type: 'recursive',
+            message: prompt.recursion_message,
+            name: prompt.name,
+            prompts: questions,
+            skipable: prompt.skipable || false,
+            ask_question_first: prompt.ask_question_first || false,
+            skip_if_empty: prompt.skip_if_empty || null
+        }];
+    }
+    return questions;
 }
 
 try {
