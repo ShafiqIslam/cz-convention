@@ -1,7 +1,8 @@
-const Message = require('@sheba/commit-template/message.js');
-const Type = require('@sheba/commit-template/type.js');
-const Issue = require('@sheba/commit-template/issue.js');
-const Author = require('@sheba/commit-template/author.js');
+const commit_template = require('@sheba/commit-template');
+const Message = commit_template.dto.message;
+const Type = commit_template.dto.type;
+const Issue = commit_template.dto.issue;
+const Author = commit_template.dto.author;
 
 let _answers = null;
 let _czrc = null;

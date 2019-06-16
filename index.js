@@ -1,11 +1,10 @@
-const CZRC = require('@sheba/commit-template/CZRC.js');
+const commit_template = require('@sheba/commit-template');
+const czrc = commit_template.czrc;
 const skipper = require('./skipper.js');
 const questionBuilder = require('./question_builder.js')(skipper);
 const recursor = require('./recursor.js')(skipper);
-let czrc = new CZRC();
-czrc.load();
 const messageBuilder = require('./message_builder.js')(czrc);
-const format = require('@sheba/commit-template/formatter.js')(czrc);
+const format = commit_template.formatter.toString;
 
 function prompter(inquirer, callback) {
     (async function() {
@@ -22,7 +21,6 @@ function prompter(inquirer, callback) {
                 answers[name] = answer[name];
             }
         }
-        // console.dir(messageBuilder.build(answers), {depth: null});
         callback(format(messageBuilder.build(answers)));
     })();
 }
