@@ -1,4 +1,4 @@
-const readline = require('readline');
+/*const readline = require('readline');
 const robot = require("robotjs");
 
 let skip = false;
@@ -9,7 +9,9 @@ process.stdin.on('keypress', (ch, key) => {
         skip = true;
         robot.keyTap('enter');
     }
-});
+});*/
+
+let skip = false;
 
 module.exports = {
     shouldSkip: function() {
