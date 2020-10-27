@@ -22,6 +22,15 @@ Then, Reference it in your `package.json` of your project
   }
   ...
 ```
+Or, globally
+```
+npm install -g @sheba/cz-convention
+```
+Then, Reference it:
+```
+echo '{ "path": "@sheba/cz-convention" }' > ~/.czrc
+```
+
 
 # Usage
 Traditionally,

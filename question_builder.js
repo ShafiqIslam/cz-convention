@@ -29,7 +29,7 @@ function build(czrc) {
             }],
             recursive: false
         },
-        {
+        /*{
             questions: [{
                 type: 'list',
                 name: 'scope',
@@ -43,7 +43,7 @@ function build(czrc) {
 			ask_question_first: true,
             skip_if_empty: 'scope',
             recursion_message: 'Add another scope:'
-        },
+        },*/
         {
 			questions: [{
                 type: 'list',
