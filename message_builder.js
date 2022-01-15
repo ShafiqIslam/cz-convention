@@ -1,8 +1,7 @@
-const commit_template = require('@sheba/commit-template');
-const Message = commit_template.dto.message;
-const Type = commit_template.dto.type;
-const Issue = commit_template.dto.issue;
-const Author = commit_template.dto.author;
+let Message = null;
+let Type = null;
+let Issue = null;
+let Author = null;
 
 let _answers = null;
 let _czrc = null;
@@ -15,6 +14,7 @@ function build(answers) {
     if(_answers.why) message.setWhy(_answers.why);
     if(_answers.what) message.setWhat(_answers.what);
     if(_answers.issues && _answers.issues.length) message.setIssues(buildIssues());
+    if(_answers.default_tracker_issues && _answers.default_tracker_issues.length) message.setIssues(buildIssuesOfDefaultTracker());
     if(_answers.references && _answers.references.length) message.setReferences(buildReferences());
     if(_answers.co_authors && _answers.co_authors.length) message.setCoAuthors(buildCoAuthors());
     return message;
@@ -46,6 +46,16 @@ function buildIssues() {
     return issues;
 }
 
+function buildIssuesOfDefaultTracker() {
+    let issues = [];
+    _answers.default_tracker_issues.forEach(function(issue) {
+        if(issue.issue_id) {
+            issues.push(new Issue(_czrc.defaultIssueTracker, issue.issue_id));
+        }
+    });
+    return issues;
+}
+
 function buildReferences() {
     let references = [];
     _answers.references.forEach(function(reference) {
@@ -63,8 +73,14 @@ function buildCoAuthors() {
     return authors;
 }
 
-module.exports = function(czrc) {
-    _czrc = czrc;
+module.exports = function(commit_template) {
+    commit_template = commit_template;
+    Message = commit_template.dto.message;
+    Type = commit_template.dto.type;
+    Issue = commit_template.dto.issue;
+    Author = commit_template.dto.author;
+    _czrc = commit_template.czrc;
+    
     return {
         build: build
     };

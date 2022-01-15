@@ -1,33 +1,37 @@
-const commit_template = require('@sheba/commit-template');
-const czrc = commit_template.czrc;
-const skipper = require('./skipper.js');
-const questionBuilder = require('./question_builder.js')(skipper);
-const recursor = require('./recursor.js')(skipper);
-const messageBuilder = require('./message_builder.js')(czrc);
-const format = commit_template.formatter.toString;
-
 function prompter(inquirer, callback) {
     (async function() {
-	    //let header = "First two questions are required. Skip other by pressing ctrl+q after providing those.\n";
-        //console.log('\x1b[33m%s\x1b[0m', header);
+        const commit_template = await require('@sheba/commit-template')();
+        const czrc = commit_template.czrc;
+        const skipper = require('./skipper.js');
+        const questionBuilder = require('./question_builder.js')(skipper);
+        const recursor = require('./recursor.js')(skipper);
+        const messageBuilder = require('./message_builder.js')(commit_template);
+        const format = commit_template.formatter.toString;
 
         inquirer.registerPrompt('recursive', recursor);
-
-        let answers = {};
-        let prompts = questionBuilder.buildPrompts(czrc);
-        for(let i=0; i<prompts.length; i++) {
-            let answer = await inquirer.prompt(getQuestions(prompts[i]));
-            for(let name in answer) {
-                answers[name] = answer[name];
-            }
-        }
-        callback(format(messageBuilder.build(answers)));
+        
+        let answers = await askQuestionsAndGetAnswers(inquirer, questionBuilder, czrc);
+        let message = messageBuilder.build(answers);
+        if (validateAndShowError(message, commit_template)) return;
+        callback(format(message));
     })();
+}
+
+async function askQuestionsAndGetAnswers(inquirer, questionBuilder, czrc) {
+    let answers = {};
+    let prompts = questionBuilder.buildPrompts(czrc, !process.argv.includes("--full"));
+    for (let i=0; i<prompts.length; i++) {
+        let answer = await inquirer.prompt(getQuestions(prompts[i]));
+        for (let name in answer) {
+            answers[name] = answer[name];
+        }
+    }
+    return answers;
 }
 
 function getQuestions(prompt) {
     let questions = prompt.questions;
-    if(prompt.recursive) {
+    if (prompt.recursive) {
         questions = [{
             type: 'recursive',
             message: prompt.recursion_message,
@@ -41,9 +45,24 @@ function getQuestions(prompt) {
     return questions;
 }
 
-/*try {
-    prompter(require('inquirer'), function(msg) { console.log(msg); console.dir(msg, {depth: null}); });
-} catch (e) { console.log(e); };*/
+function validateAndShowError(message, commit_template) {
+    const ValidationError = commit_template.errors.validation;
+    try {
+        message.validate();
+    } catch (e) {
+        if (e instanceof ValidationError) {
+            console.log("\n\x1b[31m" + e.message);
+            return true;
+        } else {
+            throw e; 
+        }
+    }
+    return false;
+}
+
+// try {
+//     prompter(require('inquirer'), function(msg) { console.log(msg); console.dir(msg, {depth: null}); });
+// } catch (e) { console.log(e); };
 
 
 /**

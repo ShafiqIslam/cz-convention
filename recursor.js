@@ -11,13 +11,13 @@ recursor.prototype.askForLoop = async function() {
 
     let result = await inquirer.prompt({
         default: false,
-        type:'confirm',
+        type: 'confirm',
         name: 'loop',
         message: this.opt.message || 'Would you like to loop ?',
         when: should_not_skip
     });
 
-    if(result.loop) {
+    if (result.loop) {
         this.askNestedQuestion();
     } else {
         this.done(this.responses);
@@ -26,10 +26,10 @@ recursor.prototype.askForLoop = async function() {
 
 recursor.prototype.askNestedQuestion = async function() {
     let result = await inquirer.prompt(this.opt.prompts);
-    if(this.opt.ask_question_first && this.opt.skip_if_empty && result[this.opt.skip_if_empty]) {
+    if (this.opt.ask_question_first && this.opt.skip_if_empty && result[this.opt.skip_if_empty]) {
         this.responses.push(result);
         this.askNestedQuestion();
-    } else if(this.opt.ask_question_first && this.opt.skip_if_empty && result[this.opt.skip_if_empty] === '') {
+    } else if (this.opt.ask_question_first && this.opt.skip_if_empty && result[this.opt.skip_if_empty] === '') {
         this.done(this.responses);
     } else {
         this.responses.push(result);
@@ -39,7 +39,7 @@ recursor.prototype.askNestedQuestion = async function() {
 
 recursor.prototype._run = function ( cb ) {
     this.done = cb;
-    if(this.opt.ask_question_first) {
+    if (this.opt.ask_question_first) {
         this.askNestedQuestion();
     } else {
         this.askForLoop();
