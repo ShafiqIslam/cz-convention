@@ -1,14 +1,29 @@
 # cz-convention
 forked from [ngryman/cz-emoji](https://github.com/ngryman/cz-emoji) to suit [my taste](https://github.com/ShafiqIslam/dotfiles/blob/master/.gitmessage).
 
+<br /><br />
+
 # Pre Requisite
 Install commitizen
 ```
 npm install -g commitizen
 ```
 
-# Install this adapter
+<br /><br />
 
+# Install this adapter
+## Global Level (to use on any project)
+```
+npm install -g @sheba/cz-convention
+```
+Then, Reference it:
+```
+echo '{ "path": "@sheba/cz-convention" }' > ~/.czrc
+```
+
+<br />
+
+## Or, Project Level (to use on only that project)
 ```
 npm install @sheba/cz-convention
 ```
@@ -21,16 +36,9 @@ Then, Reference it in your `package.json` of your project
     }
   }
   ...
-```
-Or, globally
-```
-npm install -g @sheba/cz-convention
-```
-Then, Reference it:
-```
-echo '{ "path": "@sheba/cz-convention" }' > ~/.czrc
-```
+``` 
 
+<br /><br />
 
 # Usage
 Traditionally,
