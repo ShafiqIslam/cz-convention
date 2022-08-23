@@ -8,134 +8,155 @@ let _skipper = null;
  * @private
  */
 function build(czrc, minimal) {
-    let sections = [];
+  let sections = [];
+
+  sections.push({
+    questions: [
+      {
+        type: "list",
+        name: "type",
+        message: "Type of commit:",
+        choices: czrc.formatTypesWithEmoji(),
+      },
+    ],
+    recursive: true,
+    name: "types",
+    ask_question_first: true,
+    recursion_message: "Add another type:",
+  });
+
+  sections.push({
+    questions: [
+      {
+        type: "input",
+        name: "subject",
+        message: "This commit will:",
+      },
+    ],
+    recursive: false,
+  });
+
+  if (minimal) {
+    if (czrc.doesNotHaveIssueTracker()) return sections;
 
     sections.push({
-        questions: [{
-            type: 'list',
-            name: 'type',
-            message: "Type of commit:",
-            choices: czrc.formatTypesWithEmoji()
-        }],
-        recursive: true,
-        name: 'types',
-        ask_question_first: true,
-        recursion_message: 'Add another type:'
-    });
-
-    sections.push({ 
-        questions: [{
-            type: 'input',
-            name: 'subject',
-            message: 'This commit will:'
-        }],
-        recursive: false
-    });
-
-    if (minimal) {
-        sections.push({ 
-            questions: [{
-                type: 'input',
-                name: 'issue_id',
-                message: czrc.defaultIssueTracker + ' Issue ID:'
-            }],
-            name: 'default_tracker_issues',
-            recursive: true,
-            ask_question_first: true,
-            recursion_message: 'Add another issue:'
-        });
-        return sections;
-    }
-
-    sections.push({
-        questions: [{
-            type: 'list',
-            name: 'tracker',
-            message: 'Add issue:',
-            choices: [{ name: '[nope]', value: '' }].concat(czrc.issueTrackers),
-            when: _skipper.shouldNotSkip
-        }, {
-            type: 'input',
-            name: 'issue_id',
-            message: 'Issue ID:',
-            when: function(answers) {
-                return answers.tracker !== '' && _skipper.shouldNotSkip();
-            }
-        }],
-        recursive: true,
-        skipable: true,
-        name: 'issues',
-        ask_question_first: true,
-        skip_if_empty: 'tracker',
-        recursion_message: 'Add issue:'
-    });
-
-    // sections.push({
-    //     questions: [{
-    //         type: 'list',
-    //         name: 'scope',
-    //         message: 'Add scope:',
-    //         choices: [{ name: '[none]', value: '' }].concat(czrc.scopes),
-    //         when: _skipper.shouldNotSkip
-    //     }],
-    //     recursive: true,
-    //     skipable: true,
-    //     name: 'scopes',
-    //     ask_question_first: true,
-    //     skip_if_empty: 'scope',
-    //     recursion_message: 'Add another scope:'
-    // });
-
-    sections.push({
-        questions: [{
-            type: 'input',
-            name: 'why',
-            message: 'This commit is being made becasuse:',
-            when: _skipper.shouldNotSkip
-        }, {
-            type: 'input',
-            name: 'what',
-            message: 'This commit addresses the WHY by doing:',
-            when: _skipper.shouldNotSkip
-        }],
-        recursive: false
-    });
-
-    sections.push({
-        questions: [{
-            type: 'input',
-            name: 'reference',
-            message: 'Add reference:',
-            when: _skipper.shouldNotSkip
-        }],
-        recursive: true,
-        skipable: true,
-        name: 'references',
-        ask_question_first: true,
-        skip_if_empty: 'reference',
-        recursion_message: 'Add another reference:'
-    });
-
-    sections.push({
-        questions: [{
-            type: 'autocomplete',
-            name: 'co_author',
-            message: 'Co-authored by:',
-            source: czrc.searchAuthor.bind(czrc),
-            when: _skipper.shouldNotSkip
-        }],
-        recursive: true,
-        skipable: true,
-        name: 'co_authors',
-        recursion_message: 'Add co-author:'
+      questions: [
+        {
+          type: "input",
+          name: "issue_id",
+          message: czrc.defaultIssueTracker + " Issue ID:",
+        },
+      ],
+      name: "default_tracker_issues",
+      recursive: true,
+      ask_question_first: true,
+      recursion_message: "Add another issue:",
     });
 
     return sections;
+  }
+
+  if (czrc.hasIssueTracker()) {
+    sections.push({
+      questions: [
+        {
+          type: "list",
+          name: "tracker",
+          message: "Add issue:",
+          choices: [{ name: "[nope]", value: "" }].concat(czrc.issueTrackers),
+          when: _skipper.shouldNotSkip,
+        },
+        {
+          type: "input",
+          name: "issue_id",
+          message: "Issue ID:",
+          when: function (answers) {
+            return answers.tracker !== "" && _skipper.shouldNotSkip();
+          },
+        },
+      ],
+      recursive: true,
+      skipable: true,
+      name: "issues",
+      ask_question_first: true,
+      skip_if_empty: "tracker",
+      recursion_message: "Add issue:",
+    });
+  }
+
+  // sections.push({
+  //     questions: [{
+  //         type: 'list',
+  //         name: 'scope',
+  //         message: 'Add scope:',
+  //         choices: [{ name: '[none]', value: '' }].concat(czrc.scopes),
+  //         when: _skipper.shouldNotSkip
+  //     }],
+  //     recursive: true,
+  //     skipable: true,
+  //     name: 'scopes',
+  //     ask_question_first: true,
+  //     skip_if_empty: 'scope',
+  //     recursion_message: 'Add another scope:'
+  // });
+
+  sections.push({
+    questions: [
+      {
+        type: "input",
+        name: "why",
+        message: "This commit is being made becasuse:",
+        when: _skipper.shouldNotSkip,
+      },
+      {
+        type: "input",
+        name: "what",
+        message: "This commit addresses the WHY by doing:",
+        when: _skipper.shouldNotSkip,
+      },
+    ],
+    recursive: false,
+  });
+
+  sections.push({
+    questions: [
+      {
+        type: "input",
+        name: "reference",
+        message: "Add reference:",
+        when: _skipper.shouldNotSkip,
+      },
+    ],
+    recursive: true,
+    skipable: true,
+    name: "references",
+    ask_question_first: true,
+    skip_if_empty: "reference",
+    recursion_message: "Add another reference:",
+  });
+
+  sections.push({
+    questions: [
+      {
+        type: "autocomplete",
+        name: "co_author",
+        message: "Co-authored by:",
+        source: czrc.searchAuthor.bind(czrc),
+        when: _skipper.shouldNotSkip,
+      },
+    ],
+    recursive: true,
+    skipable: true,
+    name: "co_authors",
+    recursion_message: "Add co-author:",
+  });
+
+  return sections;
 }
 
-module.exports = function(skipper) {
-    _skipper = skipper;
-    return {
-        buildPrompts: build
-    };
+module.exports = function (skipper) {
+  _skipper = skipper;
+  return {
+    buildPrompts: build,
+  };
 };

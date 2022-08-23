@@ -1,6 +1,6 @@
 {
-  "name": "@sheba/cz-convention",
-  "version": "1.5.0",
+  "name": "@polygontech/cz-convention",
+  "version": "1.0.0",
   "description": "Commitizen adapter following https://github.com/ShafiqIslam/dotfiles/blob/master/git/.gitmessage.",
   "main": "index.js",
   "scripts": {
@@ -17,7 +17,7 @@
     "inquirer": "^6.3.1",
     "inquirer-autocomplete-prompt": "^0.12.0",
     "inquirer-recursive": "0.0.6",
-    "@sheba/commit-template": "^1.3.0"
+    "@polygontech/commit-template": "^1.0.0"
   },
   "config": {
     "commitizen": {
