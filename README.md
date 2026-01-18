@@ -4,19 +4,29 @@ forked from [ngryman/cz-emoji](https://github.com/ngryman/cz-emoji) to suit [my 
 
 <br /><br />
 
-# Pre Requisite
+# Single Line Installation
 
-Install commitizen
+Run the following to install/update this tool:
+
+```
+curl -fsSL https://raw.githubusercontent.com/ShafiqIslam/cz-convention/main/install.sh | bash
+```
+
+<br /><br />
+
+# Manual Installation
+
+## Install commitizen
 
 ```
 npm install -g commitizen
 ```
 
-<br /><br />
+<br />
 
-# Install this adapter
+## Install this adapter
 
-## Global Level (to use on any project)
+### Global Level (to use on any project)
 
 ```
 npm install -g @polygontech/cz-convention
@@ -30,7 +40,7 @@ echo '{ "path": "@polygontech/cz-convention" }' > ~/.czrc
 
 <br />
 
-## Or, Project Level (to use on only that project)
+### Or, Project Level (to use on only that project)
 
 ```
 npm install @polygontech/cz-convention

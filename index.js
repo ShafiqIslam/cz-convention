@@ -1,5 +1,10 @@
 function prompter(inquirer, callback) {
   (async function () {
+    const updater = require("./updater.js");
+    await updater.update();
+
+    console.log("Press enter to take the default answer. Uppercase options are treated as default.\n");
+
     const commit_template = await require("@polygontech/commit-template")();
     const czrc = commit_template.czrc;
     const skipper = require("./skipper.js");
@@ -20,8 +25,14 @@ function prompter(inquirer, callback) {
 async function askQuestionsAndGetAnswers(inquirer, questionBuilder, czrc) {
   let answers = {};
   let prompts = questionBuilder.buildPrompts(czrc, !process.argv.includes("--full"));
+  let suggestion = undefined;
+
+  if (!process.argv.includes("--no-suggestion")) {
+    suggestion = await require("./suggestions.js").get(czrc.types); 
+  }
+
   for (let i = 0; i < prompts.length; i++) {
-    let answer = await inquirer.prompt(getQuestions(prompts[i]));
+    let answer = await inquirer.prompt(getQuestions(prompts[i], suggestion));
     for (let name in answer) {
       answers[name] = answer[name];
     }
@@ -29,8 +40,13 @@ async function askQuestionsAndGetAnswers(inquirer, questionBuilder, czrc) {
   return answers;
 }
 
-function getQuestions(prompt) {
+function getQuestions(prompt, suggestion) {
   let questions = prompt.questions;
+
+  if (suggestion) {
+    questions = require("./suggestions.js").apply(questions, suggestion); 
+  }
+
   if (prompt.recursive) {
     questions = [
       {
