@@ -40,7 +40,7 @@ async function getSuggestion(types) {
 function getGitDiff() {
   const { execSync } = require("child_process");
 
-  const diff = execSync("git diff --staged ':!package-lock.json'", {
+  const diff = execSync("git diff --staged", {
     encoding: "utf-8",
   });
 
