@@ -3,7 +3,9 @@ function prompter(inquirer, callback) {
     const updater = require("./updater.js");
     await updater.update();
 
-    console.log("Press enter to take the default answer. Uppercase options are treated as default.\n");
+    console.log(
+      "Press enter to take the default answer. Uppercase options are treated as default.\n",
+    );
 
     const commit_template = await require("@polygontech/commit-template")();
     const czrc = commit_template.czrc;
@@ -15,7 +17,11 @@ function prompter(inquirer, callback) {
 
     inquirer.registerPrompt("recursive", recursor);
 
-    let answers = await askQuestionsAndGetAnswers(inquirer, questionBuilder, czrc);
+    let answers = await askQuestionsAndGetAnswers(
+      inquirer,
+      questionBuilder,
+      czrc,
+    );
     let message = messageBuilder.build(answers);
     if (validateAndShowError(message, commit_template)) return;
     callback(format(message));
@@ -24,11 +30,16 @@ function prompter(inquirer, callback) {
 
 async function askQuestionsAndGetAnswers(inquirer, questionBuilder, czrc) {
   let answers = {};
-  let prompts = questionBuilder.buildPrompts(czrc, !process.argv.includes("--full"));
+  let prompts = questionBuilder.buildPrompts(
+    czrc,
+    !process.argv.includes("--full"),
+  );
+
+  let globalConfig = readGlobalConfig();
   let suggestion = undefined;
 
-  if (!process.argv.includes("--no-suggestion")) {
-    suggestion = await require("./suggestions.js").get(czrc.types); 
+  if (globalConfig.suggestion == true && process.env.SUGGESTION !== 'false') {
+    suggestion = await require("./suggestions.js").get(czrc.types, globalConfig);
   }
 
   for (let i = 0; i < prompts.length; i++) {
@@ -44,7 +55,7 @@ function getQuestions(prompt, suggestion) {
   let questions = prompt.questions;
 
   if (suggestion) {
-    questions = require("./suggestions.js").apply(questions, suggestion); 
+    questions = require("./suggestions.js").apply(questions, suggestion);
   }
 
   if (prompt.recursive) {
@@ -76,6 +87,15 @@ function validateAndShowError(message, commit_template) {
     }
   }
   return false;
+}
+
+function readGlobalConfig() {
+  const fs = require("fs");
+  const path = require("path");
+  const os = require("os");
+
+  const gloalConfigRaw = fs.readFileSync(path.join(os.homedir(), ".czrc"), 'utf8');
+  return gloalConfigRaw.trim() ? JSON.parse(gloalConfigRaw) : { suggestion: false };
 }
 
 // try {

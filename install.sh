@@ -11,6 +11,12 @@ then
     exit 1
 fi
 
+if ! command -v jq >/dev/null 2>&1; then
+  echo "❌ jq is required to safely update ~/.czrc"
+  echo "👉 Install jq first (e.g. sudo apt install jq / brew install jq)."
+  exit 1
+fi
+
 # Function to install or update a global npm package
 install_or_update() {
     local pkg=$1
@@ -36,12 +42,32 @@ install_or_update @polygontech/cz-convention
 
 # Configure ~/.czrc
 CZRC_PATH="$HOME/.czrc"
+ADAPTER_PATH="@polygontech/cz-convention"
+
 if [ -f "$CZRC_PATH" ]; then
-    echo "🔧 ~/.czrc already exists, updating path to adapter..."
+  echo "🔧 ~/.czrc exists — updating adapter path only"
+
+  tmpfile="$(mktemp)"
+
+  jq --arg path "$ADAPTER_PATH" \
+    '.path = $path' \
+    "$CZRC_PATH" > "$tmpfile" && mv "$tmpfile" "$CZRC_PATH"
+
 else
-    echo "🔧 Creating ~/.czrc to reference adapter..."
+  echo "🔧 ~/.czrc not found — creating default config"
+  cat <<EOF > "$CZRC_PATH"
+{
+    "path": "@polygontech/cz-convention",
+    "suggestion": true, 
+    "llm": {
+        "provider": "ollama", 
+        "ollamaUrl": "http://192.168.12.41:11434/",
+        "model": "adelnazmy2002/Qwen3-VL-4B-Instruct:Q4_K_M",
+        "apiKey": ""
+    }
+}
+EOF
 fi
-echo '{ "path": "@polygontech/cz-convention" }' > "$CZRC_PATH"
 
 echo "✅ Installation and update check complete!"
 echo "You can now use Commitizen in any project:"

@@ -1,6 +1,9 @@
 function applySuggestions(questions, suggestion) {
   if (questions[0].name == "type") {
-    questions[0].default = findChoicesIndexByName(questions[0].choices, suggestion.type);
+    questions[0].default = findChoicesIndexByName(
+      questions[0].choices,
+      suggestion.type,
+    );
   }
 
   if (questions[0].name == "subject") {
@@ -10,31 +13,93 @@ function applySuggestions(questions, suggestion) {
   return questions;
 }
 
-async function getSuggestion(types) {
+async function getSuggestion(types, config) {
   try {
     console.log(
-      "Generating suggestion, Please wait...\nIf you don't require suggestion, run with --no-suggestion flag.\n",
+      "Generating suggestion, Please wait...\nIf you don't require suggestion, run with SUGGESTION=false env arg.\n",
     );
 
-    const { GoogleGenAI } = require("@google/genai");
+    const llmConfig = getValidLlmConfig(config);
+    const prompt = buildPrompt(getGitDiff(), types);
+    const result =
+      llmConfig.provider == "gemini"
+        ? await getSuggestionWithGemini(prompt, llmConfig)
+        : await getSuggestionWithOllama(prompt, llmConfig);
 
-    const ai = new GoogleGenAI({
-      apiKey: "AIzaSyB_ZqmdO19CDMxHE32GhLvnqjbUBE-eyZw",
-    });
-
-    const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
-      contents: buildPrompt(getGitDiff(), types),
-    });
-
-    const suggestionSplitted = response.text.split(": ");
+    const suggestionSplitted = result.split(": ");
 
     return { type: suggestionSplitted[0], subject: suggestionSplitted[1] };
   } catch (e) {
-    console.log("Could not generate suggestion. Error: " + e.message);
+    console.log("Could not generate suggestion. Error: " + e.message + "\n");
   }
 
   return undefined;
+}
+
+function getValidLlmConfig(config) {
+  if (!Object.hasOwn(config, "llm")) {
+    throw new Error("No llm config found.");
+  }
+
+  const llmConfig = config.llm;
+
+  if (
+    !Object.hasOwn(llmConfig, "provider") ||
+    !["ollama", "gemini"].includes(llmConfig.provider)
+  ) {
+    throw new Error(
+      "No valid llm provider found. Only supported providers are: 'ollama', 'gemini'",
+    );
+  }
+
+  return llmConfig;
+}
+
+async function getSuggestionWithGemini(prompt, llmConfig) {
+  if (!Object.hasOwn(llmConfig, "apiKey") || !llmConfig.apiKey) {
+    throw new Error("Api key is required to generate suggestion with gemini.");
+  }
+
+  const { GoogleGenAI } = require("@google/genai");
+
+  const ai = new GoogleGenAI({
+    apiKey: llmConfig.apiKey,
+  });
+
+  const response = await ai.models.generateContent({
+    model: llmConfig.model,
+    contents: prompt,
+  });
+
+  return response.text;
+}
+
+async function getSuggestionWithOllama(prompt, llmConfig) {
+  
+
+  const { Ollama } = require("ollama");
+
+  const ollama = new Ollama({
+    host: Object.hasOwn(llmConfig, "ollamaUrl")
+      ? llmConfig.ollamaUrl
+      : undefined,
+    headers: Object.hasOwn(llmConfig, "apiKey")
+      ? { Authorization: "Bearer " + llmConfig.apiKey }
+      : undefined,
+    
+  });
+
+  if (!Object.hasOwn(llmConfig, "model") || !llmConfig.model) {
+    throw new Error("ollama model not configured.");
+  }
+
+  const response = await ollama.chat({
+    model: llmConfig.model,
+    keep_alive: -1,
+    messages: [{ role: "user", content: prompt }],
+  });
+
+  return response.message.content;
 }
 
 function getGitDiff() {
@@ -73,7 +138,7 @@ Rules (must follow all):
 - Output ONLY the commit message, nothing else
 
 Allowed TYPES:
-${types.map(t => t.name).join(",")}
+${types.map((t) => t.name).join(",")}
 
 Input (git diff):
 ${diff}

@@ -1,6 +1,6 @@
 {
   "name": "@polygontech/cz-convention",
-  "version": "2.0.1",
+  "version": "2.1.1",
   "description": "Commitizen adapter following https://github.com/ShafiqIslam/dotfiles/blob/master/git/.gitmessage.",
   "main": "index.js",
   "scripts": {
@@ -19,6 +19,7 @@
     "inquirer": "^6.3.1",
     "inquirer-autocomplete-prompt": "^0.12.0",
     "inquirer-recursive": "0.0.6",
+    "ollama": "^0.6.3",
     "prompts": "^2.4.2",
     "update-notifier": "^7.3.1"
   },
