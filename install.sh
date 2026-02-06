@@ -43,28 +43,35 @@ install_or_update @polygontech/cz-convention
 # Configure ~/.czrc
 CZRC_PATH="$HOME/.czrc"
 ADAPTER_PATH="@polygontech/cz-convention"
+DEFAULT_SUGGESTION=true
+DEFAULT_LLM='{
+  "provider": "ollama",
+  "ollamaUrl": "http://192.168.12.41:11434/",
+  "model": "adelnazmy2002/Qwen3-VL-4B-Instruct:Q4_K_M",
+  "apiKey": ""
+}'
 
 if [ -f "$CZRC_PATH" ]; then
-  echo "🔧 ~/.czrc exists — updating adapter path only"
+  echo "🔧 ~/.czrc exists — updating adapter path and checking defaults"
 
   tmpfile="$(mktemp)"
 
   jq --arg path "$ADAPTER_PATH" \
-    '.path = $path' \
-    "$CZRC_PATH" > "$tmpfile" && mv "$tmpfile" "$CZRC_PATH"
+     --argjson suggestion "$DEFAULT_SUGGESTION" \
+     --argjson llm "$DEFAULT_LLM" '
+    .path = $path
+    | if has("suggestion") then . else . + { suggestion: $suggestion } end
+    | if has("llm") then . else . + { llm: $llm } end
+  ' "$CZRC_PATH" > "$tmpfile" && mv "$tmpfile" "$CZRC_PATH"
 
 else
   echo "🔧 ~/.czrc not found — creating default config"
+
   cat <<EOF > "$CZRC_PATH"
 {
-    "path": "@polygontech/cz-convention",
-    "suggestion": true, 
-    "llm": {
-        "provider": "ollama", 
-        "ollamaUrl": "http://192.168.12.41:11434/",
-        "model": "adelnazmy2002/Qwen3-VL-4B-Instruct:Q4_K_M",
-        "apiKey": ""
-    }
+  "path": "$ADAPTER_PATH",
+  "suggestion": $DEFAULT_SUGGESTION,
+  "llm": $DEFAULT_LLM
 }
 EOF
 fi
